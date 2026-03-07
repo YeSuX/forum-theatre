@@ -24,22 +24,36 @@ export async function POST(request: NextRequest) {
       (p) => p.id === interventionPointId,
     );
     if (!interventionPoint) {
+      console.error('Intervention point not found:', interventionPointId);
       return NextResponse.json(
         { error: 'Intervention point not found' },
         { status: 404 },
       );
     }
 
+    console.log('Intervention point:', interventionPoint);
+    console.log('Looking for character with id:', interventionPoint.dialogueWith);
+    console.log('Available characters:', script.characters.map(c => ({ id: c.id, name: c.name })));
+
     const character = script.characters.find(
       (c) => c.id === interventionPoint.dialogueWith,
     );
     if (!character) {
       console.error(`Character not found: ${interventionPoint.dialogueWith}`);
+      console.error('Available character IDs:', script.characters.map(c => c.id));
       return NextResponse.json(
-        { error: 'Character not found' },
+        { 
+          error: 'Character not found',
+          details: {
+            requestedId: interventionPoint.dialogueWith,
+            availableIds: script.characters.map(c => c.id)
+          }
+        },
         { status: 404 },
       );
     }
+
+    console.log('Found character:', { id: character.id, name: character.name });
 
     const lastUserMessage = messages
       .filter((m: { role: string }) => m.role === 'user')
@@ -51,6 +65,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    if (!process.env.MOONSHOT_API_KEY) {
+      console.error('MOONSHOT_API_KEY is not configured');
+      return NextResponse.json(
+        { error: 'API key not configured' },
+        { status: 500 },
+      );
+    }
+
+    console.log('Initializing AI engines...');
     const aiEngine = new AIDialogueEngine(
       process.env.MOONSHOT_API_KEY,
       'https://api.moonshot.cn/v1',
@@ -60,6 +83,8 @@ export async function POST(request: NextRequest) {
       process.env.MOONSHOT_API_KEY,
       'https://api.moonshot.cn/v1',
     );
+
+    console.log('Generating AI response...');
 
     const response = await aiEngine.generateResponse(
       {
@@ -75,10 +100,14 @@ export async function POST(request: NextRequest) {
       character,
     );
 
+    console.log('AI response generated:', response);
+
     const analysis = await analyzer.analyzeDialogue(messages);
     const hasDeadlock = analyzer.detectDeadlock(messages);
 
-    return NextResponse.json({
+    console.log('Analysis complete:', { analysis, hasDeadlock });
+
+    const result = {
       response,
       analysis,
       hasDeadlock,
@@ -87,11 +116,18 @@ export async function POST(request: NextRequest) {
         name: character.name,
         avatar: character.avatar,
       },
-    });
+    };
+
+    console.log('Returning result:', result);
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error('Dialogue API error:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 },
     );
   }

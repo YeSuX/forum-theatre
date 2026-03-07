@@ -118,7 +118,7 @@ ${userMessages.map((m, i) => `${i + 1}. ${m.content}`).join('\n')}
     const completion = await this.openai.chat.completions.create({
       model: 'kimi-k2.5',
       messages: [{ role: 'user', content: prompt }],
-      temperature: 0.5,
+      temperature: 1,
       max_tokens: 200,
     });
 

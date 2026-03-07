@@ -16,19 +16,41 @@ export class AIDialogueEngine {
     character: Character,
   ): Promise<AIDialogueResponse> {
     const systemPrompt = this.buildSystemPrompt(character, request);
-    const messages = request.dialogueHistory.map((msg) => ({
-      role: msg.role === 'user' ? ('user' as const) : ('assistant' as const),
-      content: msg.content,
-    }));
+    
+    console.log('Raw dialogue history:', request.dialogueHistory);
+    
+    const messages = request.dialogueHistory
+      .filter((msg) => msg.content && msg.content.trim().length > 0)
+      .map((msg) => ({
+        role: msg.role === 'user' ? ('user' as const) : ('assistant' as const),
+        content: msg.content,
+      }));
+
+    console.log('Filtered messages for AI:', messages);
+    console.log('System prompt:', systemPrompt);
 
     const completion = await this.openai.chat.completions.create({
       model: 'kimi-k2.5',
       messages: [{ role: 'system', content: systemPrompt }, ...messages],
-      temperature: 0.8,
+      temperature: 1,
       max_tokens: 200,
     });
+    
+    console.log('AI completion response:', completion.choices[0]?.message);
 
-    const content = completion.choices[0]?.message?.content || '';
+    const content = completion.choices[0]?.message?.content?.trim() || '';
+    
+    if (!content) {
+      console.error('AI returned empty content, using fallback');
+      const fallbackContent = `（${character.name}沉默了一下，似乎在思考如何回应）`;
+      const emotion = 'tense';
+      return {
+        content: fallbackContent,
+        emotion,
+        internalThought: this.generateInternalThought(fallbackContent, character),
+      };
+    }
+
     const emotion = this.detectEmotion(content);
 
     return {
@@ -59,7 +81,18 @@ ${character.background}
 语言风格：${character.languageStyle}
 ${userThoughtsContext}
 
-请严格按照角色设定进行对话，保持角色的语言风格和情绪状态。回复应该简短自然，不超过 100 字。`;
+重要规则：
+1. 你必须以 ${character.name} 的身份直接回复对话，不要使用旁白或描述性语言
+2. 回复必须是具体的对话内容，不能为空
+3. 保持角色的语言风格和情绪状态
+4. 回复应该简短自然，20-80 字之间
+5. 直接说出你想说的话，不要加"我说："、"${character.name}说："等前缀
+
+示例：
+错误：（沉默）
+错误：${character.name}没有说话
+正确：我知道你的意思，但是...
+正确：这件事我们能不能换个方式？`;
   }
 
   private detectEmotion(content: string): 'calm' | 'tense' | 'angry' {

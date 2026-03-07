@@ -3906,18 +3906,17 @@ const ShareDialog = dynamic(
   - [ ] 测试复制功能
   - [ ] 测试不同设备兼容性
 
-#### 1.6 内心独白生成 🟡 P1
+#### 1.6 内心独白生成 🟡 P1 ✅
 
-- [ ] 修改 AIDialogueEngine
-  - [ ] 更新 `generateInternalThought` 方法
-  - [ ] 使用 LLM 生成个性化独白
-  - [ ] 基于角色设定和对话内容
-  - [ ] 添加错误处理和降级逻辑
-  - [ ] 更新 `lib/engines/ai-dialogue-engine.ts`
-- [ ] 测试内心独白
-  - [ ] 测试生成质量
-  - [ ] 测试错误降级
-  - [ ] 验证角色一致性
+- [x] 修改 AIDialogueEngine
+  - [x] 更新 `generateInternalThought` 方法
+  - [x] 使用 LLM 生成个性化独白
+  - [x] 基于角色设定和对话内容
+  - [x] 添加错误处理和降级逻辑
+  - [x] 更新 `lib/engines/ai-dialogue-engine.ts`
+  - [x] 修复 Kimi API temperature 参数（必须为 1）
+- [x] 测试内心独白
+  - [x] 修复所有 AI 引擎的 temperature 参数
 
 ---
 

@@ -46,7 +46,7 @@ ${messages.map((m) => `${m.role === 'user' ? '用户' : 'AI'}：${m.content}`).j
     const completion = await this.openai.chat.completions.create({
       model: 'kimi-k2.5',
       messages: [{ role: 'user', content: prompt }],
-      temperature: 0.3,
+      temperature: 1,
       max_tokens: 200,
     });
 

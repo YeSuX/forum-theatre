@@ -47,13 +47,10 @@ export default function DialoguePage() {
     reset();
     if (script && pointId) {
       const point = script.interventionPoints.find((p) => p.id === pointId);
-      if (point) {
-        const character = script.characters.find(
-          (c) => c.id === point.dialogueWith
-        );
-        if (character) {
-          setSelectedCharacter(character.id);
-        }
+      if (point && point.userPlaysAs) {
+        setSelectedCharacter(point.userPlaysAs);
+        console.log('User plays as:', point.userPlaysAs);
+        console.log('Dialogue with:', point.dialogueWith);
       }
     }
   }, [script, pointId, reset]);
@@ -109,20 +106,43 @@ export default function DialoguePage() {
         }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        console.error('API error response:', errorData);
+        throw new Error(errorData.message || `API error: ${response.status}`);
+      }
+
       const data = await response.json();
+      console.log('API response data:', data);
+
+      if (!data.character || !data.response) {
+        console.error('Invalid response structure:', data);
+        throw new Error('服务器返回数据格式错误');
+      }
+
+      if (!data.response.content || data.response.content.trim().length === 0) {
+        console.error('AI returned empty content:', data.response);
+        throw new Error('AI 未返回有效回复，请重试');
+      }
 
       const aiMessage: Message = {
         id: `msg-${Date.now()}-ai`,
         role: 'ai',
         characterId: data.character.id,
-        content: data.response.content,
+        content: data.response.content.trim(),
         timestamp: Date.now(),
         emotion: data.response.emotion,
       };
 
       addMessage(aiMessage);
-      addAnalysis(data.analysis);
-      setDeadlock(data.hasDeadlock);
+      
+      if (data.analysis) {
+        addAnalysis(data.analysis);
+      }
+      
+      if (data.hasDeadlock !== undefined) {
+        setDeadlock(data.hasDeadlock);
+      }
     } catch (error) {
       console.error('Failed to send message:', error);
       toast.error('发送失败，请重试');
@@ -214,15 +234,18 @@ export default function DialoguePage() {
                       transition={{ duration: 0.2 }}
                       className={`flex gap-3 ${isUser ? 'flex-row-reverse' : ''}`}
                     >
-                      <Avatar className="w-10 h-10 border-2 border-slate-600">
+                      <Avatar className={`w-10 h-10 border-2 ${isUser ? 'border-purple-500' : 'border-slate-600'}`}>
                         <AvatarImage src={character?.avatar} />
                         <AvatarFallback>
-                          {isUser ? '你' : character?.name[0]}
+                          {character?.name[0] || '?'}
                         </AvatarFallback>
                       </Avatar>
                       <div className={`flex-1 max-w-[75%] ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
                         <div className="text-slate-400 text-xs mb-1">
-                          {isUser ? '你' : character?.name}
+                          {character?.name}
+                          {isUser && (
+                            <span className="text-purple-400 ml-1">(你)</span>
+                          )}
                         </div>
                         <div
                           className={`px-4 py-3 rounded-lg ${
@@ -273,22 +296,39 @@ export default function DialoguePage() {
       <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700">
         <div className="container mx-auto px-4 py-4">
           <div className="max-w-4xl mx-auto space-y-3">
-            <div className="flex gap-2 flex-wrap">
-              {script.characters.map((character) => (
-                <Button
-                  key={character.id}
-                  variant={selectedCharacter === character.id ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setSelectedCharacter(character.id)}
-                  className={
-                    selectedCharacter === character.id
-                      ? 'bg-purple-600 hover:bg-purple-700 border-2 border-purple-500'
-                      : 'bg-slate-800 border-slate-700 hover:bg-slate-700'
-                  }
-                >
-                  对 {character.name} 说
-                </Button>
-              ))}
+            <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
+              <div className="text-slate-400 text-xs mb-2">你正在扮演</div>
+              <div className="flex items-center gap-3">
+                <Avatar className="w-8 h-8 border-2 border-purple-500">
+                  <AvatarImage
+                    src={
+                      script.characters.find((c) => c.id === point.userPlaysAs)
+                        ?.avatar
+                    }
+                  />
+                  <AvatarFallback>
+                    {
+                      script.characters.find((c) => c.id === point.userPlaysAs)
+                        ?.name[0]
+                    }
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="text-white font-semibold">
+                    {
+                      script.characters.find((c) => c.id === point.userPlaysAs)
+                        ?.name
+                    }
+                  </div>
+                  <div className="text-slate-400 text-xs">
+                    对话对象：
+                    {
+                      script.characters.find((c) => c.id === point.dialogueWith)
+                        ?.name
+                    }
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="flex gap-2">
