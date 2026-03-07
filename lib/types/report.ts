@@ -10,6 +10,7 @@ export interface Report {
   keyMoment: {
     quote: string;
     comment: string;
+    speaker?: string;
   };
   aiThoughts: {
     characterName: string;

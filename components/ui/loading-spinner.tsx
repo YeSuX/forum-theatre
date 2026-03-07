@@ -22,7 +22,7 @@ export function LoadingSpinner({
     <div className="flex items-center justify-center">
       <Loader2
         className={cn(
-          'animate-spin text-purple-500',
+          'animate-spin text-primary',
           sizeClasses[size],
           className
         )}

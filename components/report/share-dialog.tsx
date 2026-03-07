@@ -11,7 +11,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Share2, Download, Copy, Check } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { Share2, Download, Copy, Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { Report } from '@/lib/types';
 
@@ -20,6 +21,7 @@ interface ShareDialogProps {
 }
 
 export function ShareDialog({ report }: ShareDialogProps) {
+  const [open, setOpen] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -32,8 +34,9 @@ export function ShareDialog({ report }: ShareDialogProps) {
     try {
       const canvas = await html2canvas(reportRef.current, {
         scale: 2,
-        backgroundColor: '#0f172a',
+        backgroundColor: '#ffffff',
         logging: false,
+        useCORS: true,
       });
 
       const url = canvas.toDataURL('image/png');
@@ -74,65 +77,82 @@ export function ShareDialog({ report }: ShareDialogProps) {
     }
   };
 
+  const handleOpenChange = (newOpen: boolean) => {
+    setOpen(newOpen);
+    if (newOpen && !imageUrl && !isGenerating) {
+      generateImage();
+    }
+  };
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="gap-2"
-          onClick={generateImage}
-        >
+        <Button variant="default" className="gap-2">
           <Share2 className="w-4 h-4" />
           分享报告
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-md bg-slate-900 border-2 border-slate-700">
+      <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-white">分享你的参演报告</DialogTitle>
-          <DialogDescription className="text-slate-300">
+          <DialogTitle>分享你的参演报告</DialogTitle>
+          <DialogDescription>
             生成精美的报告图片，分享到社交媒体
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
+          {/* 报告预览卡片 */}
           <div
             ref={reportRef}
-            className="bg-slate-950 border-4 border-purple-500 p-6 rounded-lg"
+            className="bg-linear-to-br from-primary/10 via-background to-primary/5 border-2 border-primary/20 p-6 rounded-xl"
           >
             <div className="text-center space-y-4">
-              <h3 className="text-2xl font-bold text-white">
+              <div className="text-4xl mb-2">🏆</div>
+              <h3 className="text-xl md:text-2xl font-bold">
                 {report.heroType.name}
               </h3>
-              <p className="text-purple-200 text-sm">
+              <p className="text-sm text-muted-foreground leading-relaxed">
                 {report.heroType.description}
               </p>
-              <div className="grid grid-cols-3 gap-4 mt-4">
-                <div className="bg-purple-950 border-2 border-purple-500 rounded-lg p-3">
-                  <div className="text-purple-300 text-xs">边界感</div>
-                  <div className="text-white text-xl font-bold">
+              
+              <Separator className="my-4" />
+              
+              <div className="grid grid-cols-3 gap-3">
+                <div className="bg-card border rounded-lg p-3">
+                  <div className="text-muted-foreground text-xs mb-1">边界感</div>
+                  <div className="text-xl md:text-2xl font-bold text-primary">
                     {report.dimensions.boundary}
                   </div>
                 </div>
-                <div className="bg-blue-950 border-2 border-blue-500 rounded-lg p-3">
-                  <div className="text-blue-300 text-xs">策略性</div>
-                  <div className="text-white text-xl font-bold">
+                <div className="bg-card border rounded-lg p-3">
+                  <div className="text-muted-foreground text-xs mb-1">策略性</div>
+                  <div className="text-xl md:text-2xl font-bold text-primary">
                     {report.dimensions.strategy}
                   </div>
                 </div>
-                <div className="bg-green-950 border-2 border-green-500 rounded-lg p-3">
-                  <div className="text-green-300 text-xs">同理心</div>
-                  <div className="text-white text-xl font-bold">
+                <div className="bg-card border rounded-lg p-3">
+                  <div className="text-muted-foreground text-xs mb-1">同理心</div>
+                  <div className="text-xl md:text-2xl font-bold text-primary">
                     {report.dimensions.empathy}
                   </div>
                 </div>
               </div>
-              <div className="text-purple-300 text-xs mt-6">
+              
+              <div className="text-muted-foreground text-xs mt-6 font-medium">
                 Forum Theatre · 论坛剧场
               </div>
             </div>
           </div>
 
-          {imageUrl && (
+          {/* 操作按钮 */}
+          {isGenerating && (
+            <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground py-4">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              正在生成图片...
+            </div>
+          )}
+
+          {imageUrl && !isGenerating && (
             <div className="flex gap-2">
               <Button
                 onClick={downloadImage}
@@ -146,6 +166,7 @@ export function ShareDialog({ report }: ShareDialogProps) {
                 onClick={copyToClipboard}
                 className="flex-1 gap-2"
                 variant="outline"
+                disabled={copied}
               >
                 {copied ? (
                   <>
@@ -159,12 +180,6 @@ export function ShareDialog({ report }: ShareDialogProps) {
                   </>
                 )}
               </Button>
-            </div>
-          )}
-
-          {isGenerating && (
-            <div className="text-center text-sm text-muted-foreground">
-              正在生成图片...
             </div>
           )}
         </div>
