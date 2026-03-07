@@ -6,7 +6,14 @@ import { getScriptById } from '@/data/scripts';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { scriptId, interventionPointId, messages, userThoughts } = body;
+    const { 
+      scriptId, 
+      interventionPointId, 
+      messages, 
+      userThoughts,
+      userCharacterId,
+      aiCharacterId 
+    } = body;
 
     if (!process.env.MOONSHOT_API_KEY) {
       return NextResponse.json(
@@ -31,21 +38,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Intervention point:', interventionPoint);
-    console.log('Looking for character with id:', interventionPoint.dialogueWith);
-    console.log('Available characters:', script.characters.map(c => ({ id: c.id, name: c.name })));
-
-    const character = script.characters.find(
-      (c) => c.id === interventionPoint.dialogueWith,
+    // 获取用户扮演的角色
+    const userCharacter = script.characters.find(
+      (c) => c.id === (userCharacterId || interventionPoint.userPlaysAs),
     );
-    if (!character) {
-      console.error(`Character not found: ${interventionPoint.dialogueWith}`);
-      console.error('Available character IDs:', script.characters.map(c => c.id));
+    if (!userCharacter) {
+      console.error(`User character not found: ${userCharacterId}`);
+      return NextResponse.json(
+        { error: 'User character not found' },
+        { status: 404 },
+      );
+    }
+
+    // 获取 AI 扮演的角色（对话对象）
+    const aiCharacter = script.characters.find(
+      (c) => c.id === (aiCharacterId || interventionPoint.dialogueWith),
+    );
+    if (!aiCharacter) {
+      console.error(`AI character not found: ${aiCharacterId}`);
       return NextResponse.json(
         { 
-          error: 'Character not found',
+          error: 'AI character not found',
           details: {
-            requestedId: interventionPoint.dialogueWith,
+            requestedId: aiCharacterId,
             availableIds: script.characters.map(c => c.id)
           }
         },
@@ -53,7 +68,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log('Found character:', { id: character.id, name: character.name });
+    console.log('User plays as:', { id: userCharacter.id, name: userCharacter.name });
+    console.log('AI plays as:', { id: aiCharacter.id, name: aiCharacter.name });
 
     const lastUserMessage = messages
       .filter((m: { role: string }) => m.role === 'user')
@@ -89,15 +105,16 @@ export async function POST(request: NextRequest) {
     const response = await aiEngine.generateResponse(
       {
         scriptId,
-        characterId: character.id,
+        characterId: aiCharacter.id,
         interventionPointId,
         dialogueHistory: messages,
         userInput: lastUserMessage.content,
         context: {
           userThoughts: userThoughts || [],
+          userCharacter,  // 传递用户扮演的角色信息
         },
       },
-      character,
+      aiCharacter,
     );
 
     console.log('AI response generated:', response);
@@ -112,9 +129,9 @@ export async function POST(request: NextRequest) {
       analysis,
       hasDeadlock,
       character: {
-        id: character.id,
-        name: character.name,
-        avatar: character.avatar,
+        id: aiCharacter.id,
+        name: aiCharacter.name,
+        avatar: aiCharacter.avatar,
       },
     };
 

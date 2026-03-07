@@ -15,6 +15,18 @@ export interface AIDialogueRequest {
   userInput: string;
   context: {
     userThoughts: string[];
+    userCharacter?: {
+      id: string;
+      name: string;
+      age: number;
+      role: string;
+      background: string;
+      coreMotivation: string;
+      hiddenPressure: string;
+      powerLevel: string;
+      behaviorBoundary: string;
+      languageStyle: string;
+    };
   };
 }
 
