@@ -1,46 +1,45 @@
-'use client';
+"use client";
 
-import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useScriptStore } from '@/lib/stores/script-store';
-import { useDialogueStore } from '@/lib/stores/dialogue-store';
-import { Report } from '@/lib/types';
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { useScriptStore } from "@/lib/stores/script-store";
+import { useDialogueStore } from "@/lib/stores/dialogue-store";
+import { Report } from "@/lib/types";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { HeroTypeBadge } from '@/components/report/hero-type-badge';
-import { DimensionChart } from '@/components/report/dimension-chart';
-import { ShareDialog } from '@/components/report/share-dialog';
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { HeroTypeBadge } from "@/components/report/hero-type-badge";
+import { DimensionChart } from "@/components/report/dimension-chart";
+import { ShareDialog } from "@/components/report/share-dialog";
 import {
   Home,
   RotateCcw,
   Quote,
-  Brain,
   Lightbulb,
   MessageSquare,
   AlertCircle,
   Sparkles,
   RefreshCw,
-} from 'lucide-react';
-import { toast } from 'sonner';
+} from "lucide-react";
+import { toast } from "sonner";
 
 export default function ReportPage() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pointId = searchParams.get('point');
+  const pointId = searchParams.get("point");
 
   const { script } = useScriptStore();
   const { messages, analysisResults, userThoughts } = useDialogueStore();
@@ -53,21 +52,24 @@ export default function ReportPage() {
 
   const generateReport = async () => {
     if (!script || !pointId) {
-      console.error('[Report Page] Missing required params:', { script: !!script, pointId });
-      setError('缺少必要参数');
+      console.error("[Report Page] Missing required params:", {
+        script: !!script,
+        pointId,
+      });
+      setError("缺少必要参数");
       setLoading(false);
       return;
     }
 
     if (messages.length === 0) {
-      console.error('[Report Page] No messages found');
-      setError('没有对话记录');
+      console.error("[Report Page] No messages found");
+      setError("没有对话记录");
       setLoading(false);
       return;
     }
 
     try {
-      console.log('[Report Page] Starting report generation...', {
+      console.log("[Report Page] Starting report generation...", {
         scriptId: script.id,
         pointId,
         messagesCount: messages.length,
@@ -77,7 +79,7 @@ export default function ReportPage() {
 
       setProgress(20);
       setError(null);
-      
+
       const requestBody = {
         scriptId: script.id,
         interventionPointId: pointId,
@@ -85,45 +87,49 @@ export default function ReportPage() {
         analysisResults,
         userThoughts,
       };
-      
-      console.log('[Report Page] Sending request to /api/report');
-      
-      const response = await fetch('/api/report', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+
+      console.log("[Report Page] Sending request to /api/report");
+
+      const response = await fetch("/api/report", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       });
 
       setProgress(60);
-      console.log('[Report Page] Response received:', response.status);
+      console.log("[Report Page] Response received:", response.status);
 
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
-        console.error('[Report Page] API error:', errorData);
-        throw new Error(errorData.message || errorData.error || '报告生成失败');
+        console.error("[Report Page] API error:", errorData);
+        throw new Error(errorData.message || errorData.error || "报告生成失败");
       }
 
       const data = await response.json();
-      console.log('[Report Page] Report data received:', {
+      console.log("[Report Page] Report data received:", {
         hasReport: !!data.report,
         heroType: data.report?.heroType?.name,
         dimensions: data.report?.dimensions,
       });
-      
+
       setProgress(90);
-      
+
       if (!data.report) {
-        throw new Error('服务器返回数据格式错误');
+        throw new Error("服务器返回数据格式错误");
       }
 
       setReport(data.report);
       setProgress(100);
-      console.log('[Report Page] Report set successfully');
-      toast.success('报告生成完成！');
+      console.log("[Report Page] Report set successfully");
+      toast.success("报告生成完成！");
     } catch (error) {
-      console.error('[Report Page] Failed to generate report:', error);
-      console.error('[Report Page] Error stack:', error instanceof Error ? error.stack : 'No stack');
-      const errorMessage = error instanceof Error ? error.message : '报告生成失败';
+      console.error("[Report Page] Failed to generate report:", error);
+      console.error(
+        "[Report Page] Error stack:",
+        error instanceof Error ? error.stack : "No stack",
+      );
+      const errorMessage =
+        error instanceof Error ? error.message : "报告生成失败";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -174,10 +180,10 @@ export default function ReportPage() {
                   </div>
                   <Progress value={progress} className="h-2" />
                   <p className="text-sm text-muted-foreground text-center">
-                    {progress < 30 && '分析对话内容...'}
-                    {progress >= 30 && progress < 70 && '评估沟通能力...'}
-                    {progress >= 70 && progress < 95 && '生成个性化建议...'}
-                    {progress >= 95 && '即将完成...'}
+                    {progress < 30 && "分析对话内容..."}
+                    {progress >= 30 && progress < 70 && "评估沟通能力..."}
+                    {progress >= 70 && progress < 95 && "生成个性化建议..."}
+                    {progress >= 95 && "即将完成..."}
                   </p>
                 </div>
               </CardContent>
@@ -204,7 +210,7 @@ export default function ReportPage() {
             <Alert variant="destructive" className="mb-6">
               <AlertCircle className="h-4 w-4" />
               <AlertDescription>
-                {error || '无法生成报告，请重试'}
+                {error || "无法生成报告，请重试"}
               </AlertDescription>
             </Alert>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -213,14 +219,20 @@ export default function ReportPage() {
                 重新生成
               </Button>
               <Button
-                onClick={() => router.push(`/script/${params.id}/dialogue?point=${pointId}`)}
+                onClick={() =>
+                  router.push(`/script/${params.id}/dialogue?point=${pointId}`)
+                }
                 variant="outline"
                 className="gap-2"
               >
                 <MessageSquare className="w-4 h-4" />
                 返回对话
               </Button>
-              <Button onClick={() => router.push('/')} variant="ghost" className="gap-2">
+              <Button
+                onClick={() => router.push("/")}
+                variant="ghost"
+                className="gap-2"
+              >
                 <Home className="w-4 h-4" />
                 返回首页
               </Button>
@@ -232,8 +244,8 @@ export default function ReportPage() {
   }
 
   const point = script?.interventionPoints.find((p) => p.id === pointId);
-  const userMessages = messages.filter((m) => m.role === 'user');
-  const aiMessages = messages.filter((m) => m.role === 'ai');
+  const userMessages = messages.filter((m) => m.role === "user");
+  const aiMessages = messages.filter((m) => m.role === "ai");
 
   return (
     <div className="min-h-screen bg-background">
@@ -325,7 +337,9 @@ export default function ReportPage() {
                 {point && (
                   <div className="mt-4 p-3 rounded-lg border bg-card">
                     <div className="text-sm font-medium mb-2">介入点</div>
-                    <div className="text-sm text-muted-foreground">{point.title}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {point.title}
+                    </div>
                   </div>
                 )}
               </CardContent>
@@ -384,8 +398,8 @@ export default function ReportPage() {
             </Card>
           </motion.div>
 
-          {/* AI 内心独白 */}
-          {report.aiThoughts.length > 0 && (
+          {/* 对话回放 */}
+          {messages.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -393,60 +407,14 @@ export default function ReportPage() {
             >
               <Card>
                 <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <Brain className="w-5 h-5 text-primary" />
-                    <CardTitle className="text-lg md:text-xl">角色内心独白</CardTitle>
-                  </div>
-                  <CardDescription>看看 AI 角色在对话中的真实想法</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3 md:space-y-4">
-                  <AnimatePresence>
-                    {report.aiThoughts.map((thought, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.6 + 0.1 * index, duration: 0.3 }}
-                        className="rounded-lg p-4 bg-muted border"
-                      >
-                        <div className="flex items-center gap-2 mb-2">
-                          <Avatar className="w-8 h-8">
-                            <AvatarFallback className="bg-primary/10 text-primary">
-                              {thought.characterName[0]}
-                            </AvatarFallback>
-                          </Avatar>
-                          <span className="font-semibold text-sm md:text-base">
-                            {thought.characterName}
-                          </span>
-                        </div>
-                        <p className="text-sm md:text-base leading-relaxed text-muted-foreground">
-                          {thought.thought}
-                        </p>
-                      </motion.div>
-                    ))}
-                  </AnimatePresence>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-
-          {/* 对话回放 */}
-          {messages.length > 0 && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.5 }}
-            >
-              <Card>
-                <CardHeader>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <MessageSquare className="w-5 h-5 text-primary" />
-                      <CardTitle className="text-lg md:text-xl">对话回顾</CardTitle>
+                      <CardTitle className="text-lg md:text-xl">
+                        对话回顾
+                      </CardTitle>
                     </div>
-                    <Badge variant="secondary">
-                      {messages.length} 条消息
-                    </Badge>
+                    <Badge variant="secondary">{messages.length} 条消息</Badge>
                   </div>
                   <CardDescription>回顾你与角色的精彩对话</CardDescription>
                 </CardHeader>
@@ -454,30 +422,32 @@ export default function ReportPage() {
                   <div className="space-y-3 max-h-[400px] overflow-y-auto pr-2">
                     {messages.slice(0, 6).map((message) => {
                       const character = script?.characters.find(
-                        (c) => c.id === message.characterId
+                        (c) => c.id === message.characterId,
                       );
-                      const isUser = message.role === 'user';
-                      
+                      const isUser = message.role === "user";
+
                       return (
                         <div
                           key={message.id}
-                          className={`flex gap-2 ${isUser ? 'flex-row-reverse' : ''}`}
+                          className={`flex gap-2 ${isUser ? "flex-row-reverse" : ""}`}
                         >
                           <Avatar className="w-8 h-8 shrink-0">
                             <AvatarImage src={character?.avatar} />
                             <AvatarFallback>
-                              {character?.name[0] || '?'}
+                              {character?.name[0] || "?"}
                             </AvatarFallback>
                           </Avatar>
-                          <div className={`flex flex-col gap-1 max-w-[80%] ${isUser ? 'items-end' : 'items-start'}`}>
+                          <div
+                            className={`flex flex-col gap-1 max-w-[80%] ${isUser ? "items-end" : "items-start"}`}
+                          >
                             <span className="text-xs text-muted-foreground">
                               {character?.name}
                             </span>
                             <div
                               className={`px-3 py-2 rounded-lg text-sm ${
                                 isUser
-                                  ? 'bg-primary text-primary-foreground'
-                                  : 'bg-muted'
+                                  ? "bg-primary text-primary-foreground"
+                                  : "bg-muted"
                               }`}
                             >
                               {message.content}
@@ -501,7 +471,7 @@ export default function ReportPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7, duration: 0.5 }}
+            transition={{ delay: 0.6, duration: 0.5 }}
           >
             <Card className="border-primary/50 bg-primary/5">
               <CardHeader>
@@ -526,7 +496,7 @@ export default function ReportPage() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.5 }}
+            transition={{ delay: 0.7, duration: 0.5 }}
             className="flex flex-col sm:flex-row justify-center gap-3 md:gap-4"
           >
             <ShareDialog report={report} />
@@ -540,7 +510,7 @@ export default function ReportPage() {
             </Button>
             <Button
               variant="ghost"
-              onClick={() => router.push('/')}
+              onClick={() => router.push("/")}
               className="gap-2"
             >
               <Home className="w-4 h-4" />

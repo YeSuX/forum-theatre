@@ -27,6 +27,10 @@ export class ReportGenerator {
     interventionPoint: InterventionPoint,
     userThoughts: string[],
   ): Promise<Report> {
+    console.log('[ReportGenerator] Starting report generation...');
+    console.log('[ReportGenerator] Analysis results:', analysisResults);
+    console.log('[ReportGenerator] Analysis results count:', analysisResults.length);
+
     const avgBoundary =
       analysisResults.reduce((sum, a) => sum + a.boundary, 0) /
       analysisResults.length || 0;
@@ -37,14 +41,23 @@ export class ReportGenerator {
       analysisResults.reduce((sum, a) => sum + a.empathy, 0) /
       analysisResults.length || 0;
 
+    console.log('[ReportGenerator] Calculated averages:', {
+      boundary: avgBoundary,
+      strategy: avgStrategy,
+      empathy: avgEmpathy,
+    });
+
     const heroType = this.determineHeroType(
       avgBoundary,
       avgStrategy,
       avgEmpathy,
     );
 
+    console.log('[ReportGenerator] Determined hero type:', heroType.name);
+
     const keyMoment = await this.extractKeyMoment(messages, characters);
-    const aiThoughts = this.extractAIThoughts(messages, characters);
+    console.log('[ReportGenerator] Key moment extracted:', keyMoment);
+
     const knowledge = await this.generateKnowledge(
       messages,
       userThoughts,
@@ -53,8 +66,9 @@ export class ReportGenerator {
       avgEmpathy,
       interventionPoint,
     );
+    console.log('[ReportGenerator] Knowledge generated:', knowledge);
 
-    return {
+    const report = {
       scriptId,
       interventionPointId,
       heroType,
@@ -64,10 +78,14 @@ export class ReportGenerator {
         empathy: Math.round(avgEmpathy),
       },
       keyMoment,
-      aiThoughts,
+      aiThoughts: [], // 移除 AI 内心独白
       knowledge,
       createdAt: Date.now(),
     };
+
+    console.log('[ReportGenerator] Final report:', report);
+
+    return report;
   }
 
   private determineHeroType(
@@ -181,25 +199,6 @@ ${conversationContext}
     }
   }
 
-  private extractAIThoughts(
-    messages: Message[],
-    characters: Character[],
-  ): { characterName: string; thought: string }[] {
-    const aiMessages = messages.filter((m) => m.role === 'ai');
-    const thoughts: { characterName: string; thought: string }[] = [];
-
-    aiMessages.forEach((msg) => {
-      const character = characters.find((c) => c.id === msg.characterId);
-      if (character) {
-        thoughts.push({
-          characterName: character.name,
-          thought: `${character.name}内心想：${character.hiddenPressure}`,
-        });
-      }
-    });
-
-    return thoughts.slice(0, 3);
-  }
 
   private async generateKnowledge(
     messages: Message[],
