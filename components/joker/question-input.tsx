@@ -1,58 +1,45 @@
-'use client';
-
-import { useState } from 'react';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 
 interface QuestionInputProps {
+  id: string;
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
+  label: string;
   minLength?: number;
   maxLength?: number;
 }
 
 export function QuestionInput({
+  id,
   value,
   onChange,
   placeholder,
+  label,
   minLength = 0,
   maxLength = 500,
 }: QuestionInputProps) {
-  const [isFocused, setIsFocused] = useState(false);
   const charCount = value.length;
   const isValid = charCount >= minLength && charCount <= maxLength;
+  const showMinLengthHint = minLength > 0 && charCount < minLength;
 
   return (
     <div className="space-y-2">
-      <textarea
+      <Label htmlFor={id}>{label}</Label>
+      <Textarea
+        id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
-        className={`w-full h-40 px-4 py-3 bg-white/5 border rounded-lg text-white placeholder-purple-300/50 focus:outline-none resize-none transition-colors ${
-          isFocused
-            ? 'border-purple-500'
-            : isValid
-              ? 'border-purple-300/20'
-              : 'border-red-500/50'
-        }`}
+        className="min-h-[160px] resize-none"
         maxLength={maxLength}
       />
-      <div className="flex justify-between items-center text-sm">
-        <span
-          className={`${
-            isValid ? 'text-purple-300' : 'text-red-400'
-          }`}
-        >
-          {minLength > 0 && charCount < minLength
-            ? `至少 ${minLength} 字`
-            : ''}
+      <div className="flex justify-between items-center text-sm text-muted-foreground">
+        <span>
+          {showMinLengthHint && `至少 ${minLength} 字`}
         </span>
-        <span
-          className={`${
-            charCount > maxLength * 0.9 ? 'text-yellow-400' : 'text-purple-300'
-          }`}
-        >
+        <span className={charCount > maxLength * 0.9 ? 'text-warning' : ''}>
           {charCount} / {maxLength}
         </span>
       </div>
