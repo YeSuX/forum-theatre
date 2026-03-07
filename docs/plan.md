@@ -2092,25 +2092,14 @@ export async function POST(request: NextRequest) {
 
 ### 阶段 0：项目初始化（第 1 周）
 
-#### 0.1 环境搭建
+#### 0.1 环境搭建（我使用的是bun包管理工具）
 
-- [ ] ⬜ 创建 GitHub 仓库
-- [ ] ⬜ 初始化 Next.js 16 项目
-- [ ] ⬜ 配置 TypeScript
 - [ ] ⬜ 安装核心依赖
-  - [ ] ⬜ `openai` - Kimi API 客户端
   - [ ] ⬜ `zustand` - 状态管理
   - [ ] ⬜ `framer-motion` - 动画
-  - [ ] ⬜ `lucide-react` - 图标
 
 #### 0.2 项目结构搭建
 
-- [ ] ⬜ 创建目录结构
-  - [ ] ⬜ `app/` - Next.js App Router
-  - [ ] ⬜ `components/` - React 组件
-  - [ ] ⬜ `lib/` - 工具库和引擎
-  - [ ] ⬜ `data/` - 剧本数据
-  - [ ] ⬜ `public/` - 静态资源
 - [ ] ⬜ 创建 `.env.local.example` 模板
 
 ---
@@ -2148,16 +2137,6 @@ export async function POST(request: NextRequest) {
 ---
 
 ### 阶段 2：基础 UI 组件（第 1-2 周）
-
-#### 2.1 shadcn/ui 组件安装
-
-- [ ] ⬜ 初始化 shadcn/ui
-- [ ] ⬜ 安装 `button` 组件
-- [ ] ⬜ 安装 `card` 组件
-- [ ] ⬜ 安装 `progress` 组件
-- [ ] ⬜ 安装 `input` 组件
-- [ ] ⬜ 安装 `textarea` 组件
-- [ ] ⬜ 安装 `dialog` 组件
 
 #### 2.2 自定义基础组件
 
