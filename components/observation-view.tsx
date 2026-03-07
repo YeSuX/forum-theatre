@@ -6,7 +6,7 @@ import { useScriptStore } from '@/lib/stores/script-store';
 import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ChevronRight, Clapperboard } from 'lucide-react';
+import { ChevronRight, Clapperboard, SkipForward } from 'lucide-react';
 import { DialogueMessage } from '@/components/observation/dialogue-message';
 import { Dialogue } from '@/lib/types/script';
 
@@ -200,8 +200,21 @@ export function ObservationView() {
                 {currentIndex + 1} / {totalDialogues}
               </p>
             </div>
-            <div className="text-sm text-muted-foreground">
-              {currentActNumber} / {script.acts.length} 幕
+            <div className="flex items-center gap-3">
+              <div className="text-sm text-muted-foreground">
+                {currentActNumber} / {script.acts.length} 幕
+              </div>
+              {hasStarted && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleFinish}
+                  className="gap-2"
+                >
+                  <SkipForward className="w-4 h-4" />
+                  跳过观影
+                </Button>
+              )}
             </div>
           </div>
           <Progress value={progress} className="h-2" />

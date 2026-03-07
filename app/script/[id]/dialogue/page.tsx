@@ -6,16 +6,15 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useScriptStore } from '@/lib/stores/script-store';
 import { useDialogueStore } from '@/lib/stores/dialogue-store';
 import { Message } from '@/lib/types';
-import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 import { DeadlockDialog } from '@/components/joker/deadlock-dialog';
-import { Send, AlertCircle, LogOut } from 'lucide-react';
+import { Send, AlertCircle, ArrowLeft, Loader2, FileText } from 'lucide-react';
 import { toast } from 'sonner';
-import { emotionColors } from '@/lib/constants/emotions';
 
 export default function DialoguePage() {
   const params = useParams();
@@ -67,8 +66,8 @@ export default function DialoguePage() {
 
   if (!script || !pointId) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-white text-xl">加载中...</div>
+      <div className="min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-muted-foreground" />
       </div>
     );
   }
@@ -78,6 +77,9 @@ export default function DialoguePage() {
     router.push(`/script/${params.id}/intervention`);
     return null;
   }
+
+  const userCharacter = script.characters.find((c) => c.id === point.userPlaysAs);
+  const aiCharacter = script.characters.find((c) => c.id === point.dialogueWith);
 
   const handleSend = async () => {
     if (!input.trim() || isAITyping) return;
@@ -151,7 +153,11 @@ export default function DialoguePage() {
     }
   };
 
-  const handleEnd = () => {
+  const handleBack = () => {
+    router.push(`/script/${params.id}/intervention`);
+  };
+
+  const handleGenerateReport = () => {
     router.push(`/script/${params.id}/report?point=${pointId}`);
   };
 
@@ -162,62 +168,90 @@ export default function DialoguePage() {
 
   const handleDeadlockEnd = () => {
     setShowDeadlockDialog(false);
-    handleEnd();
+    handleGenerateReport();
   };
 
   const progressPercent = (currentRound / maxRounds) * 100;
   const isMaxRounds = currentRound >= maxRounds;
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <div className="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-sm border-b border-slate-700">
+    <div className="flex flex-col h-screen">
+      {/* 顶部工具栏 */}
+      <header className="border-b bg-background">
         <div className="container mx-auto px-4 py-3">
-          <div className="flex justify-between items-center mb-2">
-            <h2 className="text-xl font-bold text-white">{point.title}</h2>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleEnd}
-              className="text-slate-400 hover:text-white gap-2"
-            >
-              <LogOut className="w-4 h-4" />
-              结束对话
-            </Button>
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleBack}
+                className="shrink-0"
+              >
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+              <div className="flex items-center gap-2">
+                <Avatar className="w-8 h-8">
+                  <AvatarImage src={aiCharacter?.avatar} />
+                  <AvatarFallback>{aiCharacter?.name[0]}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <h1 className="text-sm font-semibold">{point.title}</h1>
+                  <p className="text-xs text-muted-foreground">
+                    与 {aiCharacter?.name} 对话
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {hasDeadlock && (
+                <Badge variant="outline" className="gap-1">
+                  <AlertCircle className="w-3 h-3" />
+                  僵局
+                </Badge>
+              )}
+              {isMaxRounds && (
+                <Badge variant="destructive">已达上限</Badge>
+              )}
+              {messages.length > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleGenerateReport}
+                  className="gap-2"
+                >
+                  <FileText className="w-4 h-4" />
+                  生成报告
+                </Button>
+              )}
+            </div>
           </div>
-          <Progress value={progressPercent} className="h-1.5" />
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-slate-400 text-sm">
+          <div className="space-y-1.5">
+            <Progress value={progressPercent} className="h-1" />
+            <p className="text-xs text-muted-foreground text-right">
               轮次 {currentRound} / {maxRounds}
-            </span>
-            {hasDeadlock && (
-              <Badge variant="secondary" className="bg-yellow-500/20 text-yellow-300 border-yellow-500/30">
-                <AlertCircle className="w-3 h-3 mr-1" />
-                检测到僵局
-              </Badge>
-            )}
-            {isMaxRounds && (
-              <Badge variant="secondary" className="bg-red-500/20 text-red-300 border-red-500/30">
-                已达轮次上限
-              </Badge>
-            )}
+            </p>
           </div>
         </div>
-      </div>
+      </header>
 
-      <div className="container mx-auto px-4 pt-32 pb-40">
-        <div className="max-w-4xl mx-auto">
-          <Card className="bg-slate-800/80 backdrop-blur-sm border-slate-700 min-h-[500px] max-h-[calc(100vh-20rem)] overflow-y-auto">
-            <div className="p-6 space-y-4">
-              {messages.length === 0 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center text-slate-400 py-20"
-                >
-                  <p className="text-lg mb-2">开始你的对话吧</p>
-                  <p className="text-sm">尝试理解对方，表达你的想法</p>
-                </motion.div>
-              )}
+      {/* 消息区域 */}
+      <main className="flex-1 overflow-y-auto">
+        <div className="container mx-auto px-4 py-6 max-w-4xl">
+          {messages.length === 0 ? (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex flex-col items-center justify-center h-full min-h-[400px] text-center"
+            >
+              <div className="space-y-2">
+                <p className="text-lg font-medium">开始你的对话</p>
+                <p className="text-sm text-muted-foreground">
+                  你正在扮演 {userCharacter?.name}，尝试理解对方并表达你的想法
+                </p>
+              </div>
+            </motion.div>
+          ) : (
+            <div className="space-y-6">
               <AnimatePresence mode="popLayout">
                 {messages.map((message) => {
                   const character = script.characters.find(
@@ -234,42 +268,34 @@ export default function DialoguePage() {
                       transition={{ duration: 0.2 }}
                       className={`flex gap-3 ${isUser ? 'flex-row-reverse' : ''}`}
                     >
-                      <Avatar className={`w-10 h-10 border-2 ${isUser ? 'border-purple-500' : 'border-slate-600'}`}>
+                      <Avatar className="w-9 h-9 shrink-0">
                         <AvatarImage src={character?.avatar} />
                         <AvatarFallback>
                           {character?.name[0] || '?'}
                         </AvatarFallback>
                       </Avatar>
-                      <div className={`flex-1 max-w-[75%] ${isUser ? 'items-end' : 'items-start'} flex flex-col`}>
-                        <div className="text-slate-400 text-xs mb-1">
-                          {character?.name}
-                          {isUser && (
-                            <span className="text-purple-400 ml-1">(你)</span>
+                      <div className={`flex flex-col gap-1 max-w-[80%] ${isUser ? 'items-end' : 'items-start'}`}>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-muted-foreground">
+                            {character?.name}
+                          </span>
+                          {message.emotion && !isUser && (
+                            <Badge variant="secondary" className="text-xs h-5">
+                              {message.emotion === 'calm' && '平静'}
+                              {message.emotion === 'tense' && '紧张'}
+                              {message.emotion === 'angry' && '愤怒'}
+                            </Badge>
                           )}
                         </div>
                         <div
-                          className={`px-4 py-3 rounded-lg ${
+                          className={`px-4 py-2.5 rounded-lg ${
                             isUser
-                              ? 'bg-purple-600 text-white border-2 border-purple-500'
-                              : `bg-slate-700/80 text-white border-2 border-slate-600 ${
-                                  message.emotion
-                                    ? emotionColors[message.emotion]
-                                    : ''
-                                }`
+                              ? 'bg-primary text-primary-foreground'
+                              : 'bg-muted'
                           }`}
                         >
-                          {message.content}
+                          <p className="text-sm leading-relaxed">{message.content}</p>
                         </div>
-                        {message.emotion && !isUser && (
-                          <Badge
-                            variant="secondary"
-                            className={`mt-1 text-xs ${emotionColors[message.emotion]}`}
-                          >
-                            {message.emotion === 'calm' && '平静'}
-                            {message.emotion === 'tense' && '紧张'}
-                            {message.emotion === 'angry' && '愤怒'}
-                          </Badge>
-                        )}
                       </div>
                     </motion.div>
                   );
@@ -281,57 +307,29 @@ export default function DialoguePage() {
                   animate={{ opacity: 1 }}
                   className="flex gap-3"
                 >
-                  <div className="w-10 h-10 rounded-full bg-slate-700 animate-pulse border-2 border-slate-600" />
-                  <div className="px-4 py-3 bg-slate-700/80 rounded-lg text-slate-300 border-2 border-slate-600">
-                    正在思考...
+                  <Avatar className="w-9 h-9 shrink-0">
+                    <AvatarImage src={aiCharacter?.avatar} />
+                    <AvatarFallback>{aiCharacter?.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div className="flex items-center gap-2 px-4 py-2.5 bg-muted rounded-lg">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span className="text-sm text-muted-foreground">正在思考...</span>
                   </div>
                 </motion.div>
               )}
               <div ref={messagesEndRef} />
             </div>
-          </Card>
+          )}
         </div>
-      </div>
+      </main>
 
-      <div className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-sm border-t border-slate-700">
-        <div className="container mx-auto px-4 py-4">
-          <div className="max-w-4xl mx-auto space-y-3">
-            <div className="bg-slate-800/50 rounded-lg p-3 border border-slate-700">
-              <div className="text-slate-400 text-xs mb-2">你正在扮演</div>
-              <div className="flex items-center gap-3">
-                <Avatar className="w-8 h-8 border-2 border-purple-500">
-                  <AvatarImage
-                    src={
-                      script.characters.find((c) => c.id === point.userPlaysAs)
-                        ?.avatar
-                    }
-                  />
-                  <AvatarFallback>
-                    {
-                      script.characters.find((c) => c.id === point.userPlaysAs)
-                        ?.name[0]
-                    }
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="text-white font-semibold">
-                    {
-                      script.characters.find((c) => c.id === point.userPlaysAs)
-                        ?.name
-                    }
-                  </div>
-                  <div className="text-slate-400 text-xs">
-                    对话对象：
-                    {
-                      script.characters.find((c) => c.id === point.dialogueWith)
-                        ?.name
-                    }
-                  </div>
-                </div>
-              </div>
-            </div>
+      <Separator />
 
-            <div className="flex gap-2">
+      {/* 输入区域 */}
+      <footer className="bg-background border-t">
+        <div className="container mx-auto px-4 py-4 max-w-4xl">
+          <div className="space-y-3">
+            <div className="flex gap-3">
               <Textarea
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
@@ -341,27 +339,42 @@ export default function DialoguePage() {
                     handleSend();
                   }
                 }}
-                placeholder={isMaxRounds ? '已达轮次上限' : '输入你的回应... (Shift+Enter 换行)'}
+                placeholder={
+                  isMaxRounds
+                    ? '已达轮次上限，无法继续输入'
+                    : '输入你的回应...'
+                }
                 disabled={isAITyping || isMaxRounds}
-                className="flex-1 min-h-[60px] max-h-[120px] bg-slate-800 border-2 border-slate-700 text-white placeholder-slate-500 focus:border-purple-500 disabled:opacity-50 resize-none"
-                rows={2}
+                className="flex-1 min-h-[80px] resize-none"
+                rows={3}
               />
               <Button
                 onClick={handleSend}
                 disabled={isAITyping || !input.trim() || isMaxRounds}
-                className="bg-purple-600 hover:bg-purple-700 border-2 border-purple-500 px-6"
-                size="lg"
+                size="icon"
+                className="shrink-0 w-10 h-10"
               >
-                <Send className="w-5 h-5" />
+                {isAITyping ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
               </Button>
             </div>
-            <div className="flex justify-between text-xs text-slate-400">
-              <span>{input.length} / 500 字</span>
-              <span>按 Enter 发送，Shift+Enter 换行</span>
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span>
+                {input.length} / 500 字
+                {input.length > 450 && (
+                  <span className="text-destructive ml-1">
+                    (剩余 {500 - input.length} 字)
+                  </span>
+                )}
+              </span>
+              <span>Enter 发送 · Shift+Enter 换行</span>
             </div>
           </div>
         </div>
-      </div>
+      </footer>
 
       <DeadlockDialog
         open={showDeadlockDialog}
