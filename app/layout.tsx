@@ -1,24 +1,24 @@
-import type { Metadata } from 'next';
-import { Geist, Geist_Mono } from 'next/font/google';
-import './globals.css';
-import { Header } from '@/components/shared/header';
-import { Footer } from '@/components/shared/footer';
-import { ErrorBoundary } from '@/components/ui/error-boundary';
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+import { Header } from "@/components/shared/header";
+import { Footer } from "@/components/shared/footer";
+import { ErrorBoundary } from "@/components/ui/error-boundary";
 
 const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: '论坛剧场 - 在虚拟舞台上探索真实的人性',
+  title: "论坛剧场 - 在虚拟舞台上探索真实的人性",
   description:
-    '一个数字化的论坛剧场体验平台，通过 AI 驱动的角色对话，让用户在虚拟舞台上探索真实的人性与沟通。',
+    "一个数字化的论坛剧场体验平台，通过 AI 驱动的角色对话，让用户在虚拟舞台上探索真实的人性与沟通。",
 };
 
 export default function RootLayout({
@@ -33,9 +33,9 @@ export default function RootLayout({
       >
         <ErrorBoundary>
           <div className="flex flex-col min-h-screen">
-            <Header />
+            {/* <Header /> */}
             <main className="flex-1">{children}</main>
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </ErrorBoundary>
       </body>

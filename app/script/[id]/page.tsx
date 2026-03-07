@@ -1,17 +1,13 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { getScriptById } from '@/data/scripts';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Separator } from '@/components/ui/separator';
-import { Play, Clock, Users, Sparkles } from 'lucide-react';
+import Link from "next/link";
+import Image from "next/image";
+import { notFound } from "next/navigation";
+import { getScriptById } from "@/data/scripts";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { Play, Clock, Users, Sparkles, ChevronLeft } from "lucide-react";
+import { CharacterCard } from "@/components/script/character-card";
 
 export default async function ScriptPage({
   params,
@@ -26,136 +22,142 @@ export default async function ScriptPage({
   }
 
   return (
-    <div className="min-h-screen bg-slate-950">
-      <div
-        className="fixed inset-0 opacity-10"
-        style={{
-          backgroundImage: `url(${script.coverImage})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          filter: 'blur(30px)',
-        }}
-      />
-
-      <div className="relative z-10 container mx-auto px-4 py-12">
-        <div className="max-w-4xl mx-auto">
-          <Button
-            variant="ghost"
-            className="mb-6 text-white hover:text-purple-400"
-            asChild
-          >
-            <Link href="/">← 返回首页</Link>
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="relative bg-muted/50">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
+          {/* Breadcrumb */}
+          <Button variant="ghost" size="sm" className="mb-6" asChild>
+            <Link href="/">
+              <ChevronLeft className="w-4 h-4 mr-1" />
+              返回首页
+            </Link>
           </Button>
 
-          <Card className="bg-slate-800/80 backdrop-blur-md border-slate-700">
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-4 flex-1">
-                  <h1 className="text-4xl font-bold text-white">
-                    {script.title}
-                  </h1>
-                  <p className="text-xl text-slate-300">{script.description}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {script.tags.map((tag) => (
-                      <Badge
-                        key={tag}
-                        variant="secondary"
-                        className="bg-purple-500/20 text-purple-300 border-purple-500/30"
-                      >
-                        #{tag}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardHeader>
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-start">
+            {/* Cover Image */}
+            <div className="relative aspect-video lg:aspect-square rounded-lg overflow-hidden bg-muted">
+              <Image
+                src={script.coverImage}
+                alt={`${script.title}封面图`}
+                fill
+                sizes="(max-width: 1024px) 100vw, 50vw"
+                className="object-cover"
+                priority
+              />
+            </div>
 
-            <CardContent className="space-y-8">
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                  <Users className="w-5 h-5" />
-                  角色介绍
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {script.characters.map((character) => (
-                    <Card
-                      key={character.id}
-                      className="bg-slate-700/50 border-slate-600"
-                    >
-                      <CardContent className="p-4">
-                        <div className="flex items-center gap-3">
-                          <Avatar className="w-12 h-12">
-                            <AvatarImage src={character.avatar} />
-                            <AvatarFallback>
-                              {character.name[0]}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div>
-                            <h4 className="text-white font-semibold">
-                              {character.name}
-                            </h4>
-                            <p className="text-slate-400 text-sm">
-                              {character.age} 岁 · {character.role}
-                            </p>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </Card>
+            {/* Script Info */}
+            <div className="space-y-6">
+              <div className="space-y-4">
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight">
+                  {script.title}
+                </h1>
+                <p className="text-lg text-muted-foreground leading-relaxed">
+                  {script.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {script.tags.map((tag) => (
+                    <Badge key={tag} variant="secondary">
+                      #{tag}
+                    </Badge>
                   ))}
                 </div>
               </div>
 
-              <Separator className="bg-slate-600" />
-
-              <div>
-                <h3 className="text-xl font-semibold text-white mb-4 flex items-center gap-2">
-                  <Sparkles className="w-5 h-5" />
-                  体验说明
-                </h3>
-                <div className="space-y-3 text-slate-300">
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-purple-400 text-sm">1</span>
-                    </div>
-                    <p>
-                      你将观看 {script.acts.length} 幕短剧，了解冲突如何发生
-                    </p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-purple-400 text-sm">2</span>
-                    </div>
-                    <p>你将选择一个时刻，取代主角，尝试改变剧情</p>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
-                      <span className="text-purple-400 text-sm">3</span>
-                    </div>
-                    <p>没有标准答案，重要的是探索和思考</p>
-                  </div>
+              <div className="flex items-center gap-6 text-sm text-muted-foreground">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="w-4 h-4" aria-hidden="true" />
+                  <span>{script.duration}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <Users className="w-4 h-4" aria-hidden="true" />
+                  <span>1.2k 人参演</span>
                 </div>
               </div>
 
-              <Separator className="bg-slate-600" />
+              <Button size="lg" className="w-full sm:w-auto" asChild>
+                <Link href={`/script/${script.id}/observation`}>
+                  <Play className="w-5 h-5 mr-2" />
+                  开始观演
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4 text-slate-400">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span className="text-sm">{script.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Users className="w-4 h-4" />
-                    <span className="text-sm">1.2k 人参演</span>
-                  </div>
+      {/* Content Section */}
+      <section className="container mx-auto px-4 py-12 sm:py-16">
+        <div className="max-w-4xl mx-auto space-y-12">
+          {/* Characters */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-2">
+              <Users
+                className="w-5 h-5 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <h2 className="text-2xl font-bold">角色介绍</h2>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              {script.characters.map((character) => (
+                <CharacterCard key={character.id} character={character} />
+              ))}
+            </div>
+          </div>
+
+          <Separator />
+
+          {/* Experience Guide */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-2">
+              <Sparkles
+                className="w-5 h-5 text-muted-foreground"
+                aria-hidden="true"
+              />
+              <h2 className="text-2xl font-bold">体验说明</h2>
+            </div>
+            <ol className="space-y-4">
+              <li className="flex items-start gap-4">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-sm font-semibold text-primary">1</span>
                 </div>
-                <Button
-                  size="lg"
-                  className="bg-purple-600 hover:bg-purple-700 border-2 border-purple-500 gap-2"
-                  asChild
-                >
+                <p className="text-muted-foreground pt-1">
+                  你将观看 {script.acts.length} 幕短剧,了解冲突如何发生
+                </p>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-sm font-semibold text-primary">2</span>
+                </div>
+                <p className="text-muted-foreground pt-1">
+                  你将选择一个时刻,取代主角,尝试改变剧情
+                </p>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="shrink-0 w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center">
+                  <span className="text-sm font-semibold text-primary">3</span>
+                </div>
+                <p className="text-muted-foreground pt-1">
+                  没有标准答案,重要的是探索和思考
+                </p>
+              </li>
+            </ol>
+          </div>
+
+          {/* CTA Footer */}
+          <Card className="bg-muted/50">
+            <CardContent className="pt-6">
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="text-center sm:text-left">
+                  <h3 className="font-semibold mb-1">准备好开始了吗?</h3>
+                  <p className="text-sm text-muted-foreground">
+                    探索这个故事,发现不同的可能性
+                  </p>
+                </div>
+                <Button size="lg" asChild>
                   <Link href={`/script/${script.id}/observation`}>
-                    <Play className="w-5 h-5" />
+                    <Play className="w-5 h-5 mr-2" />
                     开始观演
                   </Link>
                 </Button>
@@ -163,8 +165,7 @@ export default async function ScriptPage({
             </CardContent>
           </Card>
         </div>
-      </div>
+      </section>
     </div>
   );
 }
-
