@@ -251,7 +251,9 @@
       "conflict": "城乡文化差异",
       "challenge": "沟通能力，如何让双方都感到被尊重",
       "type": "communication",
-      "position": 15
+      "position": 15,
+      "userPlaysAs": "xiao-ya",
+      "dialogueWith": "qiu-hua"
     },
     {
       "id": "point-2",
@@ -262,7 +264,9 @@
       "conflict": "精神困境",
       "challenge": "同理心，如何帮助老人精神融入",
       "type": "empathy",
-      "position": 40
+      "position": 40,
+      "userPlaysAs": "a-qiang",
+      "dialogueWith": "qiu-hua"
     },
     {
       "id": "point-3",
@@ -273,7 +277,9 @@
       "conflict": "观念对抗",
       "challenge": "边界感与同情心的平衡",
       "type": "boundary",
-      "position": 70
+      "position": 70,
+      "userPlaysAs": "xiao-ya",
+      "dialogueWith": "qiu-hua"
     },
     {
       "id": "point-4",
@@ -284,7 +290,9 @@
       "conflict": "结构性问题",
       "challenge": "系统性思维，寻找非此即彼之外的解决方案",
       "type": "systemic",
-      "position": 95
+      "position": 95,
+      "userPlaysAs": "a-qiang",
+      "dialogueWith": "qiu-hua"
     }
   ]
 }

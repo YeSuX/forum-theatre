@@ -2,11 +2,15 @@
 
 import { useParams, useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useScriptStore } from '@/lib/stores/script-store';
 import { useDialogueStore } from '@/lib/stores/dialogue-store';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Progress } from '@/components/ui/progress';
 import { JokerAvatar } from '@/components/joker/joker-avatar';
 import { QuestionInput } from '@/components/joker/question-input';
+import { Lightbulb, ChevronLeft, ChevronRight, SkipForward } from 'lucide-react';
 
 const JOKER_QUESTIONS = [
   {
@@ -40,7 +44,7 @@ export default function JokerQuestioningPage() {
 
   if (!script) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
         <div className="text-white text-xl">加载中...</div>
       </div>
     );
@@ -48,6 +52,7 @@ export default function JokerQuestioningPage() {
 
   const currentQuestion = JOKER_QUESTIONS[currentQuestionIndex];
   const isLastQuestion = currentQuestionIndex === JOKER_QUESTIONS.length - 1;
+  const progress = ((currentQuestionIndex + 1) / JOKER_QUESTIONS.length) * 100;
 
   const handleNext = () => {
     if (isLastQuestion) {
@@ -65,83 +70,101 @@ export default function JokerQuestioningPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="container mx-auto px-4 py-16">
+    <div className="min-h-screen bg-slate-950">
+      <div className="container mx-auto px-4 py-12">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <JokerAvatar />
-            <h1 className="text-4xl font-bold text-white mb-4 mt-6">
-              小丑提问
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <div className="flex justify-center mb-6">
+              <JokerAvatar size="lg" animate />
+            </div>
+            <h1 className="text-4xl font-bold text-white mb-3">
+              让我们先思考一下
             </h1>
-            <p className="text-purple-200 text-lg">
-              在介入之前，让我们先思考一下
+            <p className="text-slate-300 text-lg">
+              在介入之前，理解冲突的本质很重要
             </p>
+          </motion.div>
+
+          <div className="mb-6">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-slate-400 text-sm">
+                问题 {currentQuestionIndex + 1} / {JOKER_QUESTIONS.length}
+              </span>
+              <span className="text-slate-400 text-sm">{Math.round(progress)}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
           </div>
 
-          <Card className="bg-white/10 backdrop-blur-sm border-purple-300/20 mb-8">
-            <CardContent className="p-8">
-              <div className="mb-6">
-                <div className="flex justify-between items-center mb-4">
-                  <span className="text-purple-300">
-                    问题 {currentQuestionIndex + 1} / {JOKER_QUESTIONS.length}
-                  </span>
-                  <div className="flex gap-2">
-                    {JOKER_QUESTIONS.map((_, index) => (
-                      <div
-                        key={index}
-                        className={`w-3 h-3 rounded-full transition-all ${
-                          index <= currentQuestionIndex
-                            ? 'bg-purple-500 scale-110'
-                            : 'bg-purple-300/30'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <h2 className="text-2xl font-semibold text-white mb-2">
-                  {currentQuestion.question}
-                </h2>
-                <p className="text-purple-300 text-sm italic">
-                  💡 {currentQuestion.hint}
-                </p>
-              </div>
-
-              <QuestionInput
-                value={answers[currentQuestion.id] || ''}
-                onChange={(value) =>
-                  setAnswers({ ...answers, [currentQuestion.id]: value })
-                }
-                placeholder={currentQuestion.placeholder}
-                minLength={10}
-                maxLength={500}
-              />
-            </CardContent>
-          </Card>
-
-          <div className="flex justify-between">
-            <button
-              onClick={handleSkip}
-              className="px-6 py-3 bg-purple-500/30 hover:bg-purple-500/50 text-white rounded-lg transition-colors"
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentQuestionIndex}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
             >
+              <Card className="bg-slate-800/80 backdrop-blur-sm border-slate-700 mb-8">
+                <CardContent className="p-8">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-semibold text-white mb-4">
+                      {currentQuestion.question}
+                    </h2>
+                    <div className="flex items-start gap-2 bg-purple-500/10 border border-purple-500/30 rounded-lg p-3">
+                      <Lightbulb className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
+                      <p className="text-purple-300 text-sm">
+                        {currentQuestion.hint}
+                      </p>
+                    </div>
+                  </div>
+
+                  <QuestionInput
+                    value={answers[currentQuestion.id] || ''}
+                    onChange={(value) =>
+                      setAnswers({ ...answers, [currentQuestion.id]: value })
+                    }
+                    placeholder={currentQuestion.placeholder}
+                    minLength={10}
+                    maxLength={500}
+                  />
+                </CardContent>
+              </Card>
+            </motion.div>
+          </AnimatePresence>
+
+          <div className="flex justify-between items-center">
+            <Button
+              variant="ghost"
+              onClick={handleSkip}
+              className="text-slate-400 hover:text-white gap-2"
+            >
+              <SkipForward className="w-4 h-4" />
               跳过提问
-            </button>
-            <div className="flex gap-4">
+            </Button>
+            <div className="flex gap-3">
               {currentQuestionIndex > 0 && (
-                <button
+                <Button
+                  variant="outline"
                   onClick={() =>
                     setCurrentQuestionIndex(currentQuestionIndex - 1)
                   }
-                  className="px-6 py-3 bg-purple-500/50 hover:bg-purple-500/70 text-white rounded-lg transition-colors"
+                  className="bg-slate-800 border-slate-700 hover:bg-slate-700 gap-2"
                 >
+                  <ChevronLeft className="w-4 h-4" />
                   上一题
-                </button>
+                </Button>
               )}
-              <button
+              <Button
                 onClick={handleNext}
-                className="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
+                className="bg-purple-600 hover:bg-purple-700 border-2 border-purple-500 gap-2"
               >
                 {isLastQuestion ? '开始介入' : '下一题'}
-              </button>
+                <ChevronRight className="w-4 h-4" />
+              </Button>
             </div>
           </div>
         </div>

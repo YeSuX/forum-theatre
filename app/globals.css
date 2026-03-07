@@ -45,6 +45,14 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  
+  --color-emotion-calm: #3b82f6;
+  --color-emotion-tense: #f59e0b;
+  --color-emotion-angry: #ef4444;
+  
+  --color-hero-boundary: #8b5cf6;
+  --color-hero-strategy: #3b82f6;
+  --color-hero-empathy: #10b981;
 }
 
 :root {

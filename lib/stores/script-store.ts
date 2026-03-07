@@ -12,6 +12,7 @@ interface ScriptState {
   tensionLevel: 'low' | 'medium' | 'high';
   isPlaying: boolean;
   isPaused: boolean;
+  isScriptEnded: boolean;
 
   loadScript: (script: Script) => void;
   nextDialogue: () => void;
@@ -20,6 +21,7 @@ interface ScriptState {
   play: () => void;
   pause: () => void;
   reset: () => void;
+  setScriptEnded: (ended: boolean) => void;
 }
 
 export const useScriptStore = create<ScriptState>((set, get) => ({
@@ -32,6 +34,7 @@ export const useScriptStore = create<ScriptState>((set, get) => ({
   tensionLevel: 'low',
   isPlaying: false,
   isPaused: false,
+  isScriptEnded: false,
 
   loadScript: (script) => {
     const engine = new ScriptEngine(script);
@@ -58,7 +61,8 @@ export const useScriptStore = create<ScriptState>((set, get) => ({
 
     const dialogue = engine.nextDialogue();
     if (!dialogue) {
-      set({ isPlaying: false });
+      console.log('Script ended, setting isScriptEnded to true');
+      set({ isPlaying: false, isScriptEnded: true });
       return;
     }
 
@@ -121,6 +125,9 @@ export const useScriptStore = create<ScriptState>((set, get) => ({
       tensionLevel: 'low',
       isPlaying: false,
       isPaused: false,
+      isScriptEnded: false,
     });
   },
+
+  setScriptEnded: (ended) => set({ isScriptEnded: ended }),
 }));

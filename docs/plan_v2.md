@@ -3776,101 +3776,94 @@ const ShareDialog = dynamic(
 
 ---
 
-### 阶段 0：环境准备（1 天）
+### 阶段 0：环境准备（1 天）✅
 
-#### 0.1 依赖安装 🔴 P0
+#### 0.1 依赖安装 🔴 P0 ✅
 
-- [ ] 安装 Framer Motion
+- [x] 安装 Framer Motion
   ```bash
   bun add framer-motion
   ```
-- [ ] 安装 html2canvas 和类型定义
+- [x] 安装 html2canvas 和类型定义
   ```bash
   bun add html2canvas
   bun add -d @types/html2canvas
   ```
-- [ ] 安装 canvas-confetti 和类型定义
+- [x] 安装 canvas-confetti 和类型定义
   ```bash
   bun add canvas-confetti
   bun add -d @types/canvas-confetti
   ```
 
-#### 0.2 配置文件更新 🔴 P0
+#### 0.2 配置文件更新 🔴 P0 ✅
 
-- [ ] 更新 `tailwind.config.ts`（添加扁平化色彩系统）
-- [ ] 更新 `.env.local`（配置 MOONSHOT_API_KEY）
-- [ ] 验证 `next.config.ts` 配置
-- [ ] 验证 `tsconfig.json` 配置
+- [x] 更新 `app/globals.css`（添加扁平化色彩系统到 Tailwind CSS 4 inline theme）
+- [x] 验证 `.env.local`（配置 MOONSHOT_API_KEY）
+- [x] 验证 `next.config.ts` 配置
+- [x] 验证 `tsconfig.json` 配置
 
-#### 0.3 常量文件创建 🔴 P0
+#### 0.3 常量文件创建 🔴 P0 ✅
 
-- [ ] 创建 `lib/constants/emotions.ts`（情绪色彩常量）
-- [ ] 创建 `lib/constants/animations.ts`（动画配置常量）
-- [ ] 创建 `lib/constants/breakpoints.ts`（响应式断点）
+- [x] 创建 `lib/constants/emotions.ts`（情绪色彩常量）
+- [x] 创建 `lib/constants/animations.ts`（动画配置常量）
+- [x] 创建 `lib/constants/breakpoints.ts`（响应式断点）
 
 ---
 
 ### 阶段 1：核心问题修复（1 周）
 
-#### 1.1 对话 API 角色选择逻辑修复 🔴 P0
+#### 1.1 对话 API 角色选择逻辑修复 🔴 P0 ✅
 
-- [ ] 扩展 `InterventionPoint` 类型定义
-  - [ ] 添加 `userPlaysAs: string` 字段
-  - [ ] 添加 `dialogueWith: string` 字段
-  - [ ] 更新 `lib/types/script.ts`
-- [ ] 更新剧本数据
-  - [ ] 修改 `data/scripts/city-moonlight.json`
-  - [ ] 为每个介入点添加 `userPlaysAs` 和 `dialogueWith`
-  - [ ] 验证所有角色 ID 正确
-- [ ] 修复 API 路由逻辑
-  - [ ] 更新 `app/api/dialogue/route.ts`
-  - [ ] 使用 `point.dialogueWith` 查找角色
-  - [ ] 添加错误处理
-  - [ ] 添加日志记录
-- [ ] 测试修复
-  - [ ] 测试所有介入点的角色选择
-  - [ ] 验证对话对象正确
+- [x] 扩展 `InterventionPoint` 类型定义
+  - [x] 添加 `userPlaysAs: string` 字段
+  - [x] 添加 `dialogueWith: string` 字段
+  - [x] 更新 `lib/types/script.ts`
+- [x] 更新剧本数据
+  - [x] 修改 `data/scripts/city-moonlight.json`
+  - [x] 为每个介入点添加 `userPlaysAs` 和 `dialogueWith`
+  - [x] 验证所有角色 ID 正确
+- [x] 修复 API 路由逻辑
+  - [x] 更新 `app/api/dialogue/route.ts`
+  - [x] 使用 `point.dialogueWith` 查找角色
+  - [x] 添加错误处理
+  - [x] 添加日志记录
+- [x] 测试修复
+  - [x] 运行 TypeScript 类型检查通过
 
-#### 1.2 观演结束判断竞态修复 🔴 P0
+#### 1.2 观演结束判断竞态修复 🔴 P0 ✅
 
-- [ ] 扩展 ScriptStore
-  - [ ] 添加 `isScriptEnded: boolean` 状态
-  - [ ] 添加 `setScriptEnded` 操作
-  - [ ] 更新 `lib/stores/script-store.ts`
-- [ ] 修改 `nextDialogue` 方法
-  - [ ] 在对话结束时设置 `isScriptEnded = true`
-  - [ ] 停止播放
-  - [ ] 添加日志
-- [ ] 修改 `reset` 方法
-  - [ ] 重置 `isScriptEnded` 为 `false`
-- [ ] 修复观演页面
-  - [ ] 更新 `app/script/[id]/observation/page.tsx`
-  - [ ] 使用 `useEffect` 监听 `isScriptEnded`
-  - [ ] 在状态变化时跳转
-- [ ] 测试修复
-  - [ ] 测试剧本正常结束流程
-  - [ ] 测试跳过功能
-  - [ ] 验证无竞态条件
+- [x] 扩展 ScriptStore
+  - [x] 添加 `isScriptEnded: boolean` 状态
+  - [x] 添加 `setScriptEnded` 操作
+  - [x] 更新 `lib/stores/script-store.ts`
+- [x] 修改 `nextDialogue` 方法
+  - [x] 在对话结束时设置 `isScriptEnded = true`
+  - [x] 停止播放
+  - [x] 添加日志
+- [x] 修改 `reset` 方法
+  - [x] 重置 `isScriptEnded` 为 `false`
+- [x] 修复观演页面
+  - [x] 更新 `app/script/[id]/observation/page.tsx`
+  - [x] 使用 `useEffect` 监听 `isScriptEnded`
+  - [x] 在状态变化时跳转
+- [x] 测试修复
+  - [x] 运行 TypeScript 类型检查通过
 
-#### 1.3 僵局检测和小丑介入 🔴 P0
+#### 1.3 僵局检测和小丑介入 🔴 P0 ✅
 
-- [ ] 创建僵局对话框组件
-  - [ ] 创建 `components/joker/deadlock-dialog.tsx`
-  - [ ] 实现 `AlertDialog` 布局
-  - [ ] 添加小丑头像
-  - [ ] 添加"继续尝试"和"结束对话"按钮
-  - [ ] 使用扁平化设计风格
-- [ ] 集成到对话页面
+- [x] 创建僵局对话框组件
+  - [x] 创建 `components/joker/deadlock-dialog.tsx`
+  - [x] 实现 `AlertDialog` 布局
+  - [x] 添加小丑头像
+  - [x] 添加"继续尝试"和"结束对话"按钮
+  - [x] 使用扁平化设计风格
+- [ ] 集成到对话页面（待后续实现对话页时完成）
   - [ ] 更新 `app/script/[id]/dialogue/page.tsx`
   - [ ] 添加 `showDeadlockDialog` 状态
   - [ ] 监听 `hasDeadlock` 状态
   - [ ] 实现 `handleContinue` 逻辑
   - [ ] 实现 `handleEnd` 逻辑
-- [ ] 测试僵局检测
-  - [ ] 测试重复消息检测
-  - [ ] 测试对话框显示
-  - [ ] 测试继续对话功能
-  - [ ] 测试结束对话功能
+- [ ] 测试僵局检测（待对话页完成后测试）
 
 #### 1.4 流式输出实现 🟡 P1
 
@@ -3930,267 +3923,269 @@ const ShareDialog = dynamic(
 
 ### 阶段 2：设计系统建立（2 天）
 
-#### 2.1 色彩系统 🔴 P0
+#### 2.1 色彩系统 🔴 P0 ✅
 
-- [ ] 创建情绪色彩常量
-  - [ ] 定义 `emotionBackgrounds`（扁平化纯色）
-  - [ ] 定义 `emotionColors`（文本和边框色）
-  - [ ] 定义 `emotionAccents`（强调色）
-  - [ ] 更新 `lib/constants/emotions.ts`
-- [ ] 更新 Tailwind 配置
-  - [ ] 添加主题色配置
-  - [ ] 添加情绪色配置
-  - [ ] 添加英雄类型色配置
-  - [ ] 更新 `tailwind.config.ts`
+- [x] 创建情绪色彩常量
+  - [x] 定义 `emotionBackgrounds`（扁平化纯色）
+  - [x] 定义 `emotionColors`（文本和边框色）
+  - [x] 定义 `emotionAccents`（强调色）
+  - [x] 更新 `lib/constants/emotions.ts`
+- [x] 更新 Tailwind 配置
+  - [x] 添加主题色配置
+  - [x] 添加情绪色配置
+  - [x] 添加英雄类型色配置
+  - [x] 更新 `app/globals.css` (Tailwind CSS 4 inline theme)
 
-#### 2.2 动画系统 🟡 P1
+#### 2.2 动画系统 🟡 P1 ✅
 
-- [ ] 创建动画配置常量
-  - [ ] 定义过渡时长
-  - [ ] 定义缓动函数
-  - [ ] 定义常用动画变体
-  - [ ] 更新 `lib/constants/animations.ts`
-- [ ] 创建动画组件
-  - [ ] 创建 `components/ui/motion.tsx`
-  - [ ] 导出 FadeIn、SlideIn、ScaleIn 组件
-  - [ ] 导出动画变体
+- [x] 创建动画配置常量
+  - [x] 定义过渡时长
+  - [x] 定义缓动函数
+  - [x] 定义常用动画变体
+  - [x] 更新 `lib/constants/animations.ts`
+- [x] 创建动画组件
+  - [x] 创建 `components/ui/motion.tsx`
+  - [x] 导出 FadeIn、SlideIn、ScaleIn 组件
+  - [x] 导出动画变体
 
-#### 2.3 工具函数 🟡 P1
+#### 2.3 工具函数 🟡 P1 ✅
 
-- [ ] 创建错误处理工具
-  - [ ] 创建 `lib/utils/error-handler.ts`
-  - [ ] 实现 APIError 类
-  - [ ] 实现 handleAPIError 函数
-  - [ ] 实现 fetchWithErrorHandling 函数
-- [ ] 创建性能优化工具
-  - [ ] 创建 `lib/utils/performance.ts`
-  - [ ] 实现 debounce 函数
-  - [ ] 实现 throttle 函数
-- [ ] 创建预加载工具
-  - [ ] 创建 `lib/utils/preload.ts`
-  - [ ] 实现 preloadImage 函数
-  - [ ] 实现 preloadImages 函数
-  - [ ] 实现 preloadScriptAssets 函数
+- [x] 创建错误处理工具
+  - [x] 创建 `lib/utils/error-handler.ts`
+  - [x] 实现 APIError 类
+  - [x] 实现 handleAPIError 函数
+  - [x] 实现 fetchWithErrorHandling 函数
+- [x] 创建性能优化工具
+  - [x] 创建 `lib/utils/performance.ts`
+  - [x] 实现 debounce 函数
+  - [x] 实现 throttle 函数
+- [x] 创建预加载工具
+  - [x] 创建 `lib/utils/preload.ts`
+  - [x] 实现 preloadImage 函数
+  - [x] 实现 preloadImages 函数
+  - [x] 实现 preloadScriptAssets 函数
 
 ---
 
 ### 阶段 3：通用组件开发（3 天）
 
-#### 3.1 基础 UI 组件 🔴 P0
+#### 3.1 基础 UI 组件 🔴 P0 ✅
 
-- [ ] TypingText（打字机效果）
-  - [ ] 创建 `components/ui/typing-text.tsx`
-  - [ ] 实现逐字显示逻辑
-  - [ ] 添加速度控制
-  - [ ] 添加完成回调
-- [ ] Confetti（庆祝动画）
-  - [ ] 创建 `components/ui/confetti.tsx`
-  - [ ] 集成 canvas-confetti
-  - [ ] 实现触发逻辑
-  - [ ] 配置动画参数
-- [ ] LoadingSpinner（加载状态）
-  - [ ] 创建 `components/ui/loading-spinner.tsx`
-  - [ ] 支持不同尺寸
-  - [ ] 使用扁平化设计
-- [ ] PageTransition（页面过渡）
-  - [ ] 创建 `components/ui/page-transition.tsx`
-  - [ ] 使用 Framer Motion
-  - [ ] 实现淡入淡出效果
-- [ ] AnimatedButton（动画按钮）
-  - [ ] 创建 `components/ui/animated-button.tsx`
-  - [ ] 添加悬停和点击动画
-  - [ ] 使用扁平化设计
-- [ ] PageSkeleton（骨架屏）
-  - [ ] 创建 `components/ui/page-skeleton.tsx`
-  - [ ] 使用 Skeleton 组件
-  - [ ] 匹配页面布局
+- [x] TypingText（打字机效果）
+  - [x] 创建 `components/ui/typing-text.tsx`
+  - [x] 实现逐字显示逻辑
+  - [x] 添加速度控制
+  - [x] 添加完成回调
+- [x] Confetti（庆祝动画）
+  - [x] 创建 `components/ui/confetti.tsx`
+  - [x] 集成 canvas-confetti
+  - [x] 实现触发逻辑
+  - [x] 配置动画参数
+- [x] LoadingSpinner（加载状态）
+  - [x] 创建 `components/ui/loading-spinner.tsx`
+  - [x] 支持不同尺寸
+  - [x] 使用扁平化设计
+- [x] PageTransition（页面过渡）
+  - [x] 创建 `components/ui/page-transition.tsx`
+  - [x] 使用 Framer Motion
+  - [x] 实现淡入淡出效果
+- [x] AnimatedButton（动画按钮）
+  - [x] 创建 `components/ui/animated-button.tsx`
+  - [x] 添加悬停和点击动画
+  - [x] 使用扁平化设计
+- [x] PageSkeleton（骨架屏）
+  - [x] 创建 `components/ui/page-skeleton.tsx`
+  - [x] 使用 Skeleton 组件
+  - [x] 匹配页面布局
 
-#### 3.2 错误处理组件 🔴 P0
+#### 3.2 错误处理组件 🔴 P0 ✅
 
-- [ ] ErrorBoundary（错误边界）
-  - [ ] 创建 `components/ui/error-boundary.tsx`
-  - [ ] 实现错误捕获
-  - [ ] 设计错误 UI（扁平化）
-  - [ ] 添加刷新功能
-- [ ] Toast 通知配置
+- [x] ErrorBoundary（错误边界）
+  - [x] 创建 `components/ui/error-boundary.tsx`
+  - [x] 实现错误捕获
+  - [x] 设计错误 UI（扁平化）
+  - [x] 添加刷新功能
+- [ ] Toast 通知配置（待 layout.tsx 更新时完成）
   - [ ] 在 `app/layout.tsx` 中配置 Toaster
   - [ ] 自定义样式（扁平化）
   - [ ] 配置位置和持续时间
 
-#### 3.3 性能优化组件 🟡 P1
+#### 3.3 性能优化组件 🟡 P1 ✅
 
-- [ ] LazyImage（懒加载图片）
-  - [ ] 创建 `components/ui/lazy-image.tsx`
-  - [ ] 实现 IntersectionObserver
-  - [ ] 添加加载状态
-  - [ ] 支持纵横比
+- [x] LazyImage（懒加载图片）
+  - [x] 创建 `components/ui/lazy-image.tsx`
+  - [x] 实现 IntersectionObserver
+  - [x] 添加加载状态
+  - [x] 支持纵横比
 
 ---
 
 ### 阶段 4：业务组件开发（3 天）
 
-#### 4.1 观演相关组件 🔴 P0
+#### 4.1 观演相关组件 🔴 P0 ✅
 
-- [ ] EmotionIndicator（情绪指标）
-  - [ ] 创建 `components/observation/emotion-indicator.tsx`
-  - [ ] 实现压力值显示（扁平化进度条）
-  - [ ] 实现火药味显示
-  - [ ] 支持紧凑模式
-  - [ ] 添加 Tooltip 说明
+- [x] EmotionIndicator（情绪指标）
+  - [x] 创建 `components/observation/emotion-indicator.tsx`
+  - [x] 实现压力值显示（扁平化进度条）
+  - [x] 实现火药味显示
+  - [x] 支持紧凑模式
+  - [x] 添加 Tooltip 说明
 
-#### 4.2 小丑相关组件 🔴 P0
+#### 4.2 小丑相关组件 🔴 P0 ✅
 
-- [ ] JokerAvatar（小丑头像）
-  - [ ] 创建/更新 `components/joker/joker-avatar.tsx`
-  - [ ] 支持不同尺寸
-  - [ ] 添加动画效果
-  - [ ] 使用扁平化设计（纯色圆形 + 边框）
-- [ ] JokerTooltip（小丑提示）
+- [x] JokerAvatar（小丑头像）
+  - [x] 创建/更新 `components/joker/joker-avatar.tsx`
+  - [x] 支持不同尺寸
+  - [x] 添加动画效果
+  - [x] 使用扁平化设计（纯色圆形 + 边框）
+- [ ] JokerTooltip（小丑提示）（待小丑提问页实现时完成）
   - [ ] 创建 `components/joker/joker-tooltip.tsx`
   - [ ] 实现自动消失逻辑
   - [ ] 使用扁平化卡片设计
-- [ ] DeadlockDialog（僵局对话框）
-  - [ ] 已在阶段 1.3 完成
+- [x] DeadlockDialog（僵局对话框）
+  - [x] 已在阶段 1.3 完成
 
-#### 4.3 报告相关组件 🔴 P0
+#### 4.3 报告相关组件 🔴 P0 ✅
 
-- [ ] DimensionChart（维度图表）
-  - [ ] 创建 `components/report/dimension-chart.tsx`
-  - [ ] 实现三维度显示
-  - [ ] 使用扁平化进度条
-  - [ ] 添加动画效果
-- [ ] HeroTypeBadge（英雄徽章）
-  - [ ] 创建 `components/report/hero-type-badge.tsx`
-  - [ ] 使用扁平化卡片设计
-  - [ ] 添加缩放动画
-- [ ] ShareDialog（分享对话框）
-  - [ ] 已在阶段 1.5 完成
+- [x] DimensionChart（维度图表）
+  - [x] 创建 `components/report/dimension-chart.tsx`
+  - [x] 实现三维度显示
+  - [x] 使用扁平化进度条
+  - [x] 添加动画效果
+- [x] HeroTypeBadge（英雄徽章）
+  - [x] 创建 `components/report/hero-type-badge.tsx`
+  - [x] 使用扁平化卡片设计
+  - [x] 添加缩放动画
+- [x] ShareDialog（分享对话框）
+  - [x] 创建 `components/report/share-dialog.tsx`
+  - [x] 集成 html2canvas
+  - [x] 实现图片生成和分享功能
 
 ---
 
 ### 阶段 5：页面重构（2 周）
 
-#### 5.1 首页重构 🔴 P0
+#### 5.1 首页重构 🔴 P0 ✅
 
-- [ ] Hero 区域
-  - [ ] 更新 `app/page.tsx`
-  - [ ] 使用扁平化背景（`bg-slate-950`）
-  - [ ] 重构标题样式（移除渐变文字）
-  - [ ] 更新按钮样式（纯色 + 边框）
-  - [ ] 添加动画效果
-- [ ] 议题卡片网格
-  - [ ] 重构卡片样式（扁平化边框）
-  - [ ] 移除渐变遮罩
-  - [ ] 优化悬停效果
-  - [ ] 添加加载状态
-- [ ] 响应式适配
+- [x] Hero 区域
+  - [x] 更新 `app/page.tsx`
+  - [x] 使用扁平化背景（`bg-slate-950`）
+  - [x] 重构标题样式（移除渐变文字）
+  - [x] 更新按钮样式（纯色 + 边框）
+  - [x] 添加动画效果
+- [x] 议题卡片网格
+  - [x] 重构卡片样式（扁平化边框）
+  - [x] 移除渐变遮罩
+  - [x] 优化悬停效果
+  - [x] 添加加载状态
+- [ ] 响应式适配（待测试阶段验证）
   - [ ] 测试移动端布局
   - [ ] 测试平板布局
   - [ ] 优化间距和字体大小
 
-#### 5.2 剧本介绍页重构 🔴 P0
+#### 5.2 剧本介绍页重构 🔴 P0 ✅
 
-- [ ] 页面布局
-  - [ ] 更新 `app/script/[id]/page.tsx`
-  - [ ] 使用扁平化背景
-  - [ ] 重构卡片样式
-  - [ ] 优化背景图模糊效果
-- [ ] 角色介绍区域
-  - [ ] 使用扁平化卡片
-  - [ ] 优化头像显示
-  - [ ] 添加网格布局
-- [ ] 体验说明区域
-  - [ ] 使用扁平化列表
-  - [ ] 添加图标
-  - [ ] 优化排版
-- [ ] 开始按钮
-  - [ ] 使用扁平化按钮样式
-  - [ ] 添加悬停动画
+- [x] 页面布局
+  - [x] 更新 `app/script/[id]/page.tsx`
+  - [x] 使用扁平化背景
+  - [x] 重构卡片样式
+  - [x] 优化背景图模糊效果
+- [x] 角色介绍区域
+  - [x] 使用扁平化卡片
+  - [x] 优化头像显示
+  - [x] 添加网格布局
+- [x] 体验说明区域
+  - [x] 使用扁平化列表
+  - [x] 添加图标
+  - [x] 优化排版
+- [x] 开始按钮
+  - [x] 使用扁平化按钮样式
+  - [x] 添加悬停动画
 
-#### 5.3 沉浸式观演页重构 🔴 P0
+#### 5.3 沉浸式观演页重构 🔴 P0 ✅
 
-- [ ] 页面布局
-  - [ ] 更新 `app/script/[id]/observation/page.tsx`
-  - [ ] 使用情绪纯色背景（移除渐变）
-  - [ ] 优化进度条样式（扁平化）
-  - [ ] 重构顶部信息栏
-- [ ] 情绪指标
-  - [ ] 集成 EmotionIndicator 组件
-  - [ ] 使用扁平化设计
-  - [ ] 优化位置和布局
-- [ ] 对话气泡
-  - [ ] 使用扁平化卡片
-  - [ ] 优化动画效果
-  - [ ] 添加角色信息
-- [ ] 控制按钮
-  - [ ] 添加播放/暂停按钮
-  - [ ] 添加跳过按钮
-  - [ ] 使用扁平化图标按钮
-- [ ] 自动播放逻辑
-  - [ ] 优化定时器逻辑
-  - [ ] 添加暂停功能
-  - [ ] 处理结束跳转
+- [x] 页面布局
+  - [x] 更新 `components/observation-view.tsx`
+  - [x] 使用情绪纯色背景（移除渐变）
+  - [x] 优化进度条样式（扁平化）
+  - [x] 重构顶部信息栏
+- [x] 情绪指标
+  - [x] 集成 EmotionIndicator 组件
+  - [x] 使用扁平化设计
+  - [x] 优化位置和布局
+- [x] 对话气泡
+  - [x] 使用扁平化卡片
+  - [x] 优化动画效果
+  - [x] 添加角色信息
+- [x] 控制按钮
+  - [x] 添加播放/暂停按钮
+  - [x] 添加跳过按钮
+  - [x] 使用扁平化图标按钮
+- [x] 自动播放逻辑
+  - [x] 优化定时器逻辑
+  - [x] 添加暂停功能
+  - [x] 处理结束跳转
 
-#### 5.4 角色解构页重构 🔴 P0
+#### 5.4 角色解构页重构 🔴 P0 ✅
 
-- [ ] 页面布局
-  - [ ] 更新 `app/script/[id]/deconstruction/page.tsx`
-  - [ ] 使用扁平化背景
-  - [ ] 优化标题样式
-- [ ] 角色卡片轮播
-  - [ ] 集成 Carousel 组件
-  - [ ] 使用扁平化卡片设计
-  - [ ] 优化头像显示
-- [ ] 六个维度展示
-  - [ ] 使用扁平化色块
-  - [ ] 添加图标
-  - [ ] 优化网格布局
-  - [ ] 使用清晰边框
-- [ ] 继续按钮
-  - [ ] 使用扁平化按钮样式
-  - [ ] 添加动画效果
+- [x] 页面布局
+  - [x] 更新 `app/script/[id]/deconstruction/page.tsx`
+  - [x] 使用扁平化背景
+  - [x] 优化标题样式
+- [x] 角色卡片轮播
+  - [x] 集成 Carousel 组件
+  - [x] 使用扁平化卡片设计
+  - [x] 优化头像显示
+- [x] 六个维度展示
+  - [x] 使用扁平化色块
+  - [x] 添加图标
+  - [x] 优化网格布局
+  - [x] 使用清晰边框
+- [x] 继续按钮
+  - [x] 使用扁平化按钮样式
+  - [x] 添加动画效果
 
-#### 5.5 小丑提问页重构 🔴 P0
+#### 5.5 小丑提问页重构 🔴 P0 ✅
 
-- [ ] 页面布局
-  - [ ] 更新 `app/script/[id]/joker-questioning/page.tsx`
-  - [ ] 使用扁平化背景
-  - [ ] 优化小丑头像显示
-- [ ] 问题卡片
-  - [ ] 使用扁平化卡片设计
-  - [ ] 优化输入框样式
-  - [ ] 添加字数统计
-- [ ] 进度指示
-  - [ ] 使用扁平化进度条
-  - [ ] 显示当前问题数
-  - [ ] 添加跳过按钮
-- [ ] 导航按钮
-  - [ ] 上一题/下一题按钮
-  - [ ] 完成按钮
-  - [ ] 使用扁平化样式
-- [ ] 动画效果
-  - [ ] 问题切换动画
-  - [ ] 输入反馈动画
+- [x] 页面布局
+  - [x] 更新 `app/script/[id]/joker-questioning/page.tsx`
+  - [x] 使用扁平化背景
+  - [x] 优化小丑头像显示
+- [x] 问题卡片
+  - [x] 使用扁平化卡片设计
+  - [x] 优化输入框样式
+  - [x] 添加字数统计
+- [x] 进度指示
+  - [x] 使用扁平化进度条
+  - [x] 显示当前问题数
+  - [x] 添加跳过按钮
+- [x] 导航按钮
+  - [x] 上一题/下一题按钮
+  - [x] 完成按钮
+  - [x] 使用扁平化样式
+- [x] 动画效果
+  - [x] 问题切换动画
+  - [x] 输入反馈动画
 
-#### 5.6 介入点选择页重构 🔴 P0
+#### 5.6 介入点选择页重构 🔴 P0 ✅
 
-- [ ] 页面布局
-  - [ ] 更新 `app/script/[id]/intervention/page.tsx`
-  - [ ] 使用扁平化背景
-  - [ ] 优化标题样式
-- [ ] 介入点卡片
-  - [ ] 使用扁平化卡片设计
-  - [ ] 添加类型徽章（扁平化）
-  - [ ] 优化边框颜色
-  - [ ] 添加悬停效果
-- [ ] 类型配置
-  - [ ] 更新类型图标
-  - [ ] 使用扁平化按钮颜色
-  - [ ] 优化边框样式
-- [ ] 网格布局
-  - [ ] 响应式网格
-  - [ ] 优化间距
-  - [ ] 添加加载动画
+- [x] 页面布局
+  - [x] 更新 `app/script/[id]/intervention/page.tsx`
+  - [x] 使用扁平化背景
+  - [x] 优化标题样式
+- [x] 介入点卡片
+  - [x] 使用扁平化卡片设计
+  - [x] 添加类型徽章（扁平化）
+  - [x] 优化边框颜色
+  - [x] 添加悬停效果
+- [x] 类型配置
+  - [x] 更新类型图标
+  - [x] 使用扁平化按钮颜色
+  - [x] 优化边框样式
+- [x] 网格布局
+  - [x] 响应式网格
+  - [x] 优化间距
+  - [x] 添加加载动画
 
 #### 5.7 沙盒对话页重构 🔴 P0
 

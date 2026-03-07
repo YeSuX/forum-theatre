@@ -1,10 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useScriptStore } from '@/lib/stores/script-store';
-import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
+import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Pause, Play, SkipForward } from 'lucide-react';
+import { emotionBackgrounds, emotionColors } from '@/lib/constants/emotions';
+import { EmotionIndicator } from '@/components/observation/emotion-indicator';
 
 export function ObservationView() {
   const router = useRouter();
@@ -14,148 +20,141 @@ export function ObservationView() {
     currentDialogue,
     progress,
     stressLevel,
+    tensionLevel,
+    isPlaying,
+    isPaused,
     nextDialogue,
     play,
     pause,
-    isPlaying,
   } = useScriptStore();
 
-  const [showCharacterInfo, setShowCharacterInfo] = useState(false);
+  useEffect(() => {
+    if (!isPlaying || isPaused) return;
+
+    const timer = setTimeout(() => {
+      nextDialogue();
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [isPlaying, isPaused, currentDialogue, nextDialogue]);
 
   useEffect(() => {
-    if (isPlaying && currentDialogue) {
-      const timer = setTimeout(() => {
-        nextDialogue();
-        if (!currentDialogue) {
-          pause();
-          router.push(`/script/${script?.id}/deconstruction`);
-        }
-      }, 3000);
-      return () => clearTimeout(timer);
+    if (script && !isPlaying) {
+      play();
     }
-  }, [isPlaying, currentDialogue, nextDialogue, pause, router, script]);
+  }, [script, isPlaying, play]);
 
-  if (!script || !currentAct || !currentDialogue) {
-    return null;
+  if (!script || !currentDialogue || !currentAct) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-white text-xl">加载中...</div>
+      </div>
+    );
   }
 
   const character = script.characters.find(
-    (c) => c.id === currentDialogue.speaker,
+    (c) => c.id === currentDialogue.speaker
   );
 
-  const emotionColors = {
-    calm: 'from-blue-500/20 to-blue-600/20',
-    tense: 'from-yellow-500/20 to-orange-600/20',
-    angry: 'from-red-500/20 to-red-600/20',
+  const tensionIcons = {
+    low: '💧',
+    medium: '🔥',
+    high: '🔥🔥',
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center opacity-20 blur-sm"
-        style={{ backgroundImage: `url(${currentAct.sceneBackground})` }}
-      />
-
-      <div className="relative z-10 container mx-auto px-4 py-8">
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold text-white">
-              第 {currentAct.actNumber} 幕：{currentAct.title}
-            </h2>
-            <button
-              onClick={() => setShowCharacterInfo(!showCharacterInfo)}
-              className="px-4 py-2 bg-purple-600/50 hover:bg-purple-600/70 text-white rounded-lg transition-colors"
-            >
-              {showCharacterInfo ? '隐藏角色信息' : '查看角色信息'}
-            </button>
-          </div>
-
-          <Progress value={progress} className="h-2" />
-          <div className="flex justify-between items-center mt-2">
-            <span className="text-purple-200 text-sm">进度：{progress}%</span>
-            <span className="text-purple-200 text-sm">
-              压力值：{stressLevel}
+    <div
+      className={`min-h-screen ${emotionBackgrounds[currentDialogue.emotion]} transition-colors duration-1000`}
+    >
+      <div className="fixed top-0 left-0 right-0 z-50 bg-black/20 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-white/80 text-sm">
+              第 {currentAct.actNumber} 幕 · {currentAct.title}
             </span>
+            <span className="text-white/80 text-sm">{progress}%</span>
           </div>
+          <Progress value={progress} className="h-1" />
         </div>
+      </div>
 
-        {showCharacterInfo && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            {script.characters.map((char) => (
-              <Card
-                key={char.id}
-                className="bg-white/10 backdrop-blur-sm border-purple-300/20 p-4"
-              >
-                <div className="flex items-center gap-3 mb-2">
-                  <img
-                    src={char.avatar}
-                    alt={char.name}
-                    className="w-12 h-12 rounded-full"
-                  />
-                  <div>
-                    <h3 className="text-white font-semibold">{char.name}</h3>
-                    <p className="text-purple-300 text-sm">{char.role}</p>
-                  </div>
-                </div>
-                <p className="text-purple-200 text-sm">{char.background}</p>
-              </Card>
-            ))}
-          </div>
-        )}
+      <div className="fixed left-4 top-1/2 transform -translate-y-1/2 z-40">
+        <EmotionIndicator
+          stressLevel={stressLevel}
+          tensionLevel={tensionLevel}
+        />
+      </div>
 
-        <div className="max-w-4xl mx-auto space-y-6">
-          <div
-            className={`bg-gradient-to-r ${emotionColors[currentDialogue.emotion]} backdrop-blur-sm border border-purple-300/20 rounded-lg p-6 animate-fade-in`}
+      <div className="fixed right-4 top-1/2 transform -translate-y-1/2 z-40">
+        <div className="space-y-2">
+          <Button
+            size="icon"
+            variant="secondary"
+            className="bg-black/20 backdrop-blur-sm hover:bg-black/30"
+            onClick={() => (isPaused ? play() : pause())}
           >
-            <div className="flex items-start gap-4">
-              {character && (
-                <img
-                  src={character.avatar}
-                  alt={character.name}
-                  className="w-16 h-16 rounded-full"
-                />
-              )}
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                  <span className="text-white font-semibold text-lg">
-                    {character?.name}
-                  </span>
-                  <span className="text-purple-300 text-sm">
-                    {currentDialogue.emotion === 'calm' && '😌'}
-                    {currentDialogue.emotion === 'tense' && '😰'}
-                    {currentDialogue.emotion === 'angry' && '😠'}
-                  </span>
-                </div>
-                <p className="text-white text-lg leading-relaxed">
-                  {currentDialogue.content}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex justify-center gap-4">
-            {!isPlaying ? (
-              <button
-                onClick={play}
-                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
-              >
-                开始播放
-              </button>
+            {isPaused ? (
+              <Play className="w-5 h-5 text-white" />
             ) : (
-              <button
-                onClick={pause}
-                className="px-8 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors"
-              >
-                暂停
-              </button>
+              <Pause className="w-5 h-5 text-white" />
             )}
-            <button
-              onClick={() => router.push(`/script/${script.id}/deconstruction`)}
-              className="px-8 py-3 bg-purple-500/50 hover:bg-purple-500/70 text-white font-semibold rounded-lg transition-colors"
-            >
-              跳过观演
-            </button>
-          </div>
+          </Button>
+          <Button
+            size="icon"
+            variant="secondary"
+            className="bg-black/20 backdrop-blur-sm hover:bg-black/30"
+            onClick={() => router.push(`/script/${script.id}/deconstruction`)}
+          >
+            <SkipForward className="w-5 h-5 text-white" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-center min-h-screen px-4">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={currentDialogue.id}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="max-w-3xl w-full"
+          >
+            <div className="bg-black/20 backdrop-blur-md rounded-2xl p-8 border border-white/10">
+              {character && (
+                <div className="flex items-center gap-3 mb-6">
+                  <Avatar className="w-12 h-12 border-2 border-white/20">
+                    <AvatarImage src={character.avatar} />
+                    <AvatarFallback>{character.name[0]}</AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="text-white font-semibold">
+                      {character.name}
+                    </h3>
+                    <p className="text-white/60 text-sm">{character.role}</p>
+                  </div>
+                  <Badge
+                    variant="secondary"
+                    className={`ml-auto ${emotionColors[currentDialogue.emotion]}`}
+                  >
+                    {currentDialogue.emotion === 'calm' && '平静'}
+                    {currentDialogue.emotion === 'tense' && '紧张'}
+                    {currentDialogue.emotion === 'angry' && '愤怒'}
+                  </Badge>
+                </div>
+              )}
+
+              <p className="text-white text-2xl leading-relaxed">
+                {currentDialogue.content}
+              </p>
+            </div>
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <div className="fixed bottom-8 left-0 right-0 z-40">
+        <div className="text-center">
+          <p className="text-white/60 text-sm">点击屏幕或按空格键继续</p>
         </div>
       </div>
     </div>

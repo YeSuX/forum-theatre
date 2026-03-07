@@ -30,6 +30,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const character = script.characters.find(
+      (c) => c.id === interventionPoint.dialogueWith,
+    );
+    if (!character) {
+      console.error(`Character not found: ${interventionPoint.dialogueWith}`);
+      return NextResponse.json(
+        { error: 'Character not found' },
+        { status: 404 },
+      );
+    }
+
     const lastUserMessage = messages
       .filter((m: { role: string }) => m.role === 'user')
       .slice(-1)[0];
@@ -37,16 +48,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: 'No user message found' },
         { status: 400 },
-      );
-    }
-
-    const character = script.characters.find(
-      (c) => c.id !== lastUserMessage.characterId,
-    );
-    if (!character) {
-      return NextResponse.json(
-        { error: 'Character not found' },
-        { status: 404 },
       );
     }
 

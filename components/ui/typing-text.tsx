@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface TypingTextProps {
   text: string;
@@ -13,7 +13,7 @@ export function TypingText({
   text,
   speed = 50,
   onComplete,
-  className = '',
+  className,
 }: TypingTextProps) {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -24,6 +24,7 @@ export function TypingText({
         setDisplayedText((prev) => prev + text[currentIndex]);
         setCurrentIndex((prev) => prev + 1);
       }, speed);
+
       return () => clearTimeout(timer);
     } else if (onComplete) {
       onComplete();

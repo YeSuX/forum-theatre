@@ -1,28 +1,41 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { cn } from '@/lib/utils';
 
-export function JokerAvatar() {
-  const [isVisible, setIsVisible] = useState(false);
+interface JokerAvatarProps {
+  size?: 'sm' | 'md' | 'lg';
+  animate?: boolean;
+  className?: string;
+}
 
-  useEffect(() => {
-    setTimeout(() => setIsVisible(true), 100);
-  }, []);
+export function JokerAvatar({
+  size = 'md',
+  animate = false,
+  className,
+}: JokerAvatarProps) {
+  const sizeClasses = {
+    sm: 'w-16 h-16 text-3xl',
+    md: 'w-24 h-24 text-5xl',
+    lg: 'w-32 h-32 text-6xl',
+  };
+
+  const Component = animate ? motion.div : 'div';
 
   return (
-    <div
-      className={`transition-all duration-700 ${
-        isVisible
-          ? 'opacity-100 translate-y-0 scale-100'
-          : 'opacity-0 -translate-y-10 scale-50'
-      }`}
+    <Component
+      {...(animate && {
+        initial: { opacity: 0, scale: 0.5, rotate: -10 },
+        animate: { opacity: 1, scale: 1, rotate: 0 },
+        transition: { duration: 0.5, type: 'spring' },
+      })}
+      className={cn(
+        'rounded-full bg-purple-600 flex items-center justify-center border-4 border-purple-400',
+        sizeClasses[size],
+        className
+      )}
     >
-      <div className="relative w-32 h-32 mx-auto">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full animate-pulse" />
-        <div className="absolute inset-2 bg-slate-900 rounded-full flex items-center justify-center">
-          <span className="text-6xl">🤡</span>
-        </div>
-      </div>
-    </div>
+      <span>🎭</span>
+    </Component>
   );
 }

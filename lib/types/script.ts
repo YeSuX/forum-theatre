@@ -59,4 +59,6 @@ export interface InterventionPoint {
   challenge: string;
   type: 'communication' | 'empathy' | 'boundary' | 'systemic';
   position: number;
+  userPlaysAs: string;
+  dialogueWith: string;
 }
