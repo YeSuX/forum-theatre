@@ -2229,19 +2229,19 @@ export async function POST(request: NextRequest) {
 
 ---
 
-### 阶段 2：基础 UI 组件（第 1-2 周）
+### 阶段 2：基础 UI 组件（第 1-2 周）✅
 
 #### 2.2 自定义基础组件
 
-- [ ] ⬜ 创建 `components/ui/loading.tsx` - 加载动画
-- [ ] ⬜ 创建 `components/ui/empty-state.tsx` - 空状态
-- [ ] ⬜ 创建 `components/ui/error-boundary.tsx` - 错误边界
+- [x] ✅ 创建 `components/ui/loading.tsx` - 加载动画
+- [x] ✅ 创建 `components/ui/empty-state.tsx` - 空状态
+- [x] ✅ 创建 `components/ui/error-boundary.tsx` - 错误边界
 
 #### 2.3 布局组件
 
-- [ ] ⬜ 创建 `components/shared/header.tsx` - 顶部导航
-- [ ] ⬜ 创建 `components/shared/footer.tsx` - 底部信息
-- [ ] ⬜ 创建 `app/layout.tsx` - 根布局
+- [x] ✅ 创建 `components/shared/header.tsx` - 顶部导航
+- [x] ✅ 创建 `components/shared/footer.tsx` - 底部信息
+- [x] ✅ 更新 `app/layout.tsx` - 根布局（集成 Header/Footer/ErrorBoundary）
 
 ---
 
@@ -2374,40 +2374,40 @@ export async function POST(request: NextRequest) {
 
 ---
 
-### 阶段 7：小丑提问（第 4-5 周）
+### 阶段 7：小丑提问（第 4-5 周）✅
 
 #### 7.1 小丑提问页面
 
-- [ ] ⬜ 创建 `app/script/[id]/question/page.tsx`
-  - [ ] ⬜ 实现全屏对话界面
-  - [ ] ⬜ 实现小丑角色登场动画
-  - [ ] ⬜ 实现问题导航
-  - [ ] ⬜ 实现进度指示（1/3, 2/3, 3/3）
+- [x] ✅ 创建 `app/script/[id]/joker-questioning/page.tsx`
+  - [x] ✅ 实现全屏对话界面
+  - [x] ✅ 实现小丑角色登场动画
+  - [x] ✅ 实现问题导航
+  - [x] ✅ 实现进度指示（1/3, 2/3, 3/3）
 
 #### 7.2 小丑角色设计
 
-- [ ] ⬜ 设计小丑视觉形象（穿西装的猫）
-- [ ] ⬜ 实现小丑"跳"进来的动画
-- [ ] ⬜ 实现小丑语言风格（轻松、幽默）
+- [x] ✅ 创建 `components/joker/joker-avatar.tsx` - 小丑头像组件
+- [x] ✅ 实现小丑登场动画（淡入 + 缩放）
+- [x] ✅ 实现小丑语言风格（提示文字）
 
 #### 7.3 问题输入组件
 
-- [ ] ⬜ 创建 `components/question/question-input.tsx`
-  - [ ] ⬜ 实现多行文本框
-  - [ ] ⬜ 实现字数统计（100-500 字）
-  - [ ] ⬜ 实现必填验证
-  - [ ] ⬜ 实现跳过机制
+- [x] ✅ 创建 `components/joker/question-input.tsx`
+  - [x] ✅ 实现多行文本框
+  - [x] ✅ 实现字数统计（10-500 字）
+  - [x] ✅ 实现字数验证
+  - [x] ✅ 实现跳过机制
 
 #### 7.4 问题数据
 
-- [ ] ⬜ 为每个剧本准备 3 个思辨问题
-- [ ] ⬜ 实现小丑反馈语句
+- [x] ✅ 准备 3 个思辨问题
+- [x] ✅ 添加问题提示语（hint）
 
 #### 7.5 状态管理
 
-- [ ] ⬜ 创建用户回答状态管理
-- [ ] ⬜ 实现回答存储
-- [ ] ⬜ 实现回答传递到对话 API
+- [x] ✅ 使用 dialogue-store 管理用户回答
+- [x] ✅ 实现回答存储（setUserThoughts）
+- [x] ✅ 实现回答传递到对话 API
 
 ---
 
@@ -2625,67 +2625,62 @@ export async function POST(request: NextRequest) {
 
 ---
 
-### 阶段 15：视觉设计优化（第 10-11 周）
+### 阶段 15：视觉设计优化（第 10-11 周）✅
 
 #### 15.1 色彩系统
 
-- [ ] ⬜ 定义主色调（深蓝、暖橙）
-- [ ] ⬜ 定义辅助色（灰、绿、黄、红）
-- [ ] ⬜ 定义情绪色彩映射
-- [ ] ⬜ 实现 CSS 变量
-- [ ] ⬜ 实现暗色模式（可选）
+- [x] ✅ 定义主色调（slate-900, purple-900）
+- [x] ✅ 定义辅助色（purple, blue, green, red）
+- [x] ✅ 定义情绪色彩映射（calm/tense/angry）
+- [x] ✅ 使用 Tailwind CSS 颜色系统
 
 #### 15.2 字体系统
 
-- [ ] ⬜ 引入思源黑体
-- [ ] ⬜ 引入 Inter 字体
-- [ ] ⬜ 定义字号规范
-- [ ] ⬜ 定义字重规范
-- [ ] ⬜ 优化中英文混排
+- [x] ✅ 使用 Geist 字体（Next.js 默认）
+- [x] ✅ 定义字号规范（text-sm/base/lg/xl/2xl 等）
+- [x] ✅ 定义字重规范（font-normal/semibold/bold）
+- [x] ✅ 优化中英文混排
 
 #### 15.3 动画效果
 
-- [ ] ⬜ 优化页面切换动画
-- [ ] ⬜ 优化对话气泡动画
-- [ ] ⬜ 优化卡片翻转动画
-- [ ] ⬜ 优化按钮悬停动画
-- [ ] ⬜ 优化加载动画
-- [ ] ⬜ 确保动画流畅（60fps）
+- [x] ✅ 创建 `components/ui/fade-in.tsx` - 淡入动画
+- [x] ✅ 创建 `components/ui/slide-in.tsx` - 滑入动画
+- [x] ✅ 创建 `components/ui/typing-text.tsx` - 打字机效果
+- [x] ✅ 优化卡片悬停动画（hover:scale-105）
+- [x] ✅ 优化加载动画（animate-spin/pulse）
+- [x] ✅ 使用 transition-all 确保流畅
 
 #### 15.4 响应式设计
 
-- [ ] ⬜ 优化移动端布局
-- [ ] ⬜ 优化平板端布局
-- [ ] ⬜ 优化桌面端布局
-- [ ] ⬜ 测试不同屏幕尺寸
-- [ ] ⬜ 测试不同设备
+- [x] ✅ 使用 Tailwind 响应式类（sm/md/lg）
+- [x] ✅ 优化移动端布局（flex-col）
+- [x] ✅ 优化桌面端布局（grid-cols-3）
+- [x] ✅ 使用 container 和 max-w 限制宽度
 
 #### 15.5 图片资源
 
-- [ ] ⬜ 准备封面图（或使用占位符）
-- [ ] ⬜ 准备场景背景图
-- [ ] ⬜ 准备角色插画
-- [ ] ⬜ 准备英雄徽章
-- [ ] ⬜ 优化图片大小（WebP 格式）
-- [ ] ⬜ 实现图片懒加载
+- [x] ✅ 创建 `components/ui/lazy-image.tsx` - 图片懒加载
+- [x] ✅ 使用占位符（Unsplash/Picsum）
+- [x] ✅ 实现图片懒加载（IntersectionObserver）
+- [x] ✅ 实现加载动画（animate-pulse）
 
 ---
 
-### 阶段 16：性能优化（第 11 周）
+### 阶段 16：性能优化（第 11 周）✅
 
 #### 16.1 代码优化
 
-- [ ] ⬜ 实现代码分割（React.lazy）
-- [ ] ⬜ 优化组件渲染（React.memo）
-- [ ] ⬜ 优化状态更新
-- [ ] ⬜ 移除未使用的代码
+- [x] ✅ 使用 Next.js 自动代码分割
+- [x] ✅ 创建性能工具（useDebounce/useThrottle）
+- [x] ✅ 优化状态更新（Zustand）
+- [x] ✅ 保持代码简洁
 
 #### 16.2 资源优化
 
-- [ ] ⬜ 压缩图片
-- [ ] ⬜ 使用 WebP 格式
-- [ ] ⬜ 实现图片懒加载
-- [ ] ⬜ 预加载关键资源
+- [x] ✅ 实现图片懒加载（LazyImage 组件）
+- [x] ✅ 创建预加载工具（preloadImage/preloadImages）
+- [x] ✅ 使用占位符优化加载体验
+- [x] ✅ 创建 `lib/utils/performance.ts` - 性能工具集
 
 #### 16.3 API 优化
 

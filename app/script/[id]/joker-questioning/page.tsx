@@ -5,22 +5,27 @@ import { useState } from 'react';
 import { useScriptStore } from '@/lib/stores/script-store';
 import { useDialogueStore } from '@/lib/stores/dialogue-store';
 import { Card, CardContent } from '@/components/ui/card';
+import { JokerAvatar } from '@/components/joker/joker-avatar';
+import { QuestionInput } from '@/components/joker/question-input';
 
 const JOKER_QUESTIONS = [
   {
     id: 'q1',
     question: '你觉得这个冲突的核心问题是什么？',
     placeholder: '例如：代际差异、沟通方式、价值观冲突...',
+    hint: '试着找出表面现象背后的深层原因',
   },
   {
     id: 'q2',
     question: '如果你是其中一个角色，你会有什么感受？',
     placeholder: '尝试站在角色的角度思考...',
+    hint: '同理心是理解冲突的第一步',
   },
   {
     id: 'q3',
     question: '你认为有什么更好的解决方案吗？',
     placeholder: '分享你的想法...',
+    hint: '好的方案往往需要平衡各方需求',
   },
 ];
 
@@ -64,8 +69,10 @@ export default function JokerQuestioningPage() {
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-12">
-            <div className="text-6xl mb-4">🤡</div>
-            <h1 className="text-4xl font-bold text-white mb-4">小丑提问</h1>
+            <JokerAvatar />
+            <h1 className="text-4xl font-bold text-white mb-4 mt-6">
+              小丑提问
+            </h1>
             <p className="text-purple-200 text-lg">
               在介入之前，让我们先思考一下
             </p>
@@ -82,27 +89,31 @@ export default function JokerQuestioningPage() {
                     {JOKER_QUESTIONS.map((_, index) => (
                       <div
                         key={index}
-                        className={`w-3 h-3 rounded-full ${
+                        className={`w-3 h-3 rounded-full transition-all ${
                           index <= currentQuestionIndex
-                            ? 'bg-purple-500'
+                            ? 'bg-purple-500 scale-110'
                             : 'bg-purple-300/30'
                         }`}
                       />
                     ))}
                   </div>
                 </div>
-                <h2 className="text-2xl font-semibold text-white mb-4">
+                <h2 className="text-2xl font-semibold text-white mb-2">
                   {currentQuestion.question}
                 </h2>
+                <p className="text-purple-300 text-sm italic">
+                  💡 {currentQuestion.hint}
+                </p>
               </div>
 
-              <textarea
+              <QuestionInput
                 value={answers[currentQuestion.id] || ''}
-                onChange={(e) =>
-                  setAnswers({ ...answers, [currentQuestion.id]: e.target.value })
+                onChange={(value) =>
+                  setAnswers({ ...answers, [currentQuestion.id]: value })
                 }
                 placeholder={currentQuestion.placeholder}
-                className="w-full h-40 px-4 py-3 bg-white/5 border border-purple-300/20 rounded-lg text-white placeholder-purple-300/50 focus:outline-none focus:border-purple-500 resize-none"
+                minLength={10}
+                maxLength={500}
               />
             </CardContent>
           </Card>
