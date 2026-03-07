@@ -145,4 +145,13 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
+  
+  /* 移动端安全区域支持 */
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
 }

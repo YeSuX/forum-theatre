@@ -20,6 +20,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { DeadlockDialog } from "@/components/joker/deadlock-dialog";
 import {
   Send,
@@ -29,6 +36,7 @@ import {
   FileText,
   Users,
   MessageSquare,
+  Menu,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -58,6 +66,7 @@ export default function DialoguePage() {
   const [selectedCharacter, setSelectedCharacter] = useState<string>("");
   const [dialogueTarget, setDialogueTarget] = useState<string>("");
   const [showDeadlockDialog, setShowDeadlockDialog] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -235,7 +244,7 @@ export default function DialoguePage() {
       <header className="border-b bg-background">
         <div className="container mx-auto px-4 py-3">
           <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
               <Button
                 variant="ghost"
                 size="icon"
@@ -244,30 +253,44 @@ export default function DialoguePage() {
               >
                 <ArrowLeft className="w-4 h-4" />
               </Button>
-              <div>
-                <h1 className="text-sm font-semibold">{point.title}</h1>
+              <div className="min-w-0 flex-1">
+                <h1 className="text-sm font-semibold truncate">{point.title}</h1>
                 <p className="text-xs text-muted-foreground">
                   第 {act?.actNumber} 幕
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 md:gap-2 shrink-0">
+              {/* 移动端菜单按钮 */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setShowSidebar(true)}
+                className="md:hidden"
+              >
+                <Menu className="w-4 h-4" />
+              </Button>
+              
               {hasDeadlock && (
-                <Badge variant="outline" className="gap-1">
+                <Badge variant="outline" className="gap-1 hidden sm:flex">
                   <AlertCircle className="w-3 h-3" />
                   僵局
                 </Badge>
               )}
-              {isMaxRounds && <Badge variant="destructive">已达上限</Badge>}
+              {isMaxRounds && (
+                <Badge variant="destructive" className="hidden sm:inline-flex">
+                  已达上限
+                </Badge>
+              )}
               {messages.length > 0 && (
                 <Button
                   variant="outline"
                   size="sm"
                   onClick={handleGenerateReport}
-                  className="gap-2"
+                  className="gap-2 hidden sm:flex"
                 >
                   <FileText className="w-4 h-4" />
-                  生成报告
+                  <span className="hidden md:inline">生成报告</span>
                 </Button>
               )}
             </div>
@@ -282,8 +305,8 @@ export default function DialoguePage() {
       </header>
 
       <div className="flex-1 overflow-hidden flex">
-        {/* 左侧角色选择面板 */}
-        <aside className="w-80 border-r bg-muted/30 overflow-y-auto">
+        {/* 桌面端侧边栏 */}
+        <aside className="hidden md:block w-80 border-r bg-muted/30 overflow-y-auto">
           <div className="p-4 space-y-4">
             {/* 我扮演的角色 */}
             <Card>
@@ -415,26 +438,35 @@ export default function DialoguePage() {
         </aside>
 
         {/* 右侧消息区域 */}
-        <main className="flex-1 flex flex-col">
+        <main className="flex-1 flex flex-col w-full">
           {/* 消息列表 */}
           <div className="flex-1 overflow-y-auto">
-            <div className="container mx-auto px-4 py-6 max-w-4xl">
+            <div className="container mx-auto px-3 md:px-4 py-4 md:py-6 max-w-4xl">
               {messages.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex flex-col items-center justify-center h-full min-h-[400px] text-center"
+                  className="flex flex-col items-center justify-center h-full min-h-[300px] md:min-h-[400px] text-center px-4"
                 >
                   <div className="space-y-2">
-                    <p className="text-lg font-medium">开始你的对话</p>
+                    <p className="text-base md:text-lg font-medium">开始你的对话</p>
                     <p className="text-sm text-muted-foreground">
                       你正在扮演 {userCharacter?.name}，与 {aiCharacter?.name}{" "}
                       对话
                     </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowSidebar(true)}
+                      className="md:hidden mt-4"
+                    >
+                      <Users className="w-4 h-4 mr-2" />
+                      选择角色
+                    </Button>
                   </div>
                 </motion.div>
               ) : (
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   <AnimatePresence mode="popLayout">
                     {messages.map((message) => {
                       const character = script.characters.find(
@@ -449,16 +481,16 @@ export default function DialoguePage() {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, scale: 0.95 }}
                           transition={{ duration: 0.2 }}
-                          className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}
+                          className={`flex gap-2 md:gap-3 ${isUser ? "flex-row-reverse" : ""}`}
                         >
-                          <Avatar className="w-9 h-9 shrink-0">
+                          <Avatar className="w-8 h-8 md:w-9 md:h-9 shrink-0">
                             <AvatarImage src={character?.avatar} />
                             <AvatarFallback>
                               {character?.name[0] || "?"}
                             </AvatarFallback>
                           </Avatar>
                           <div
-                            className={`flex flex-col gap-1 max-w-[80%] ${isUser ? "items-end" : "items-start"}`}
+                            className={`flex flex-col gap-1 max-w-[85%] md:max-w-[80%] ${isUser ? "items-end" : "items-start"}`}
                           >
                             <div className="flex items-center gap-2">
                               <span className="text-xs text-muted-foreground">
@@ -473,13 +505,13 @@ export default function DialoguePage() {
                               )}
                             </div>
                             <div
-                              className={`px-4 py-2.5 rounded-lg ${
+                              className={`px-3 py-2 md:px-4 md:py-2.5 rounded-lg ${
                                 isUser
                                   ? "bg-primary text-primary-foreground"
                                   : "bg-muted"
                               }`}
                             >
-                              <p className="text-sm leading-relaxed">
+                              <p className="text-sm leading-relaxed wrap-break-word">
                                 {message.content}
                               </p>
                             </div>
@@ -515,10 +547,10 @@ export default function DialoguePage() {
           <Separator />
 
           {/* 输入区域 */}
-          <footer className="bg-background border-t">
-            <div className="container mx-auto px-4 py-4 max-w-4xl">
-              <div className="space-y-3">
-                <div className="flex gap-3">
+          <footer className="bg-background border-t safe-area-bottom">
+            <div className="container mx-auto px-3 md:px-4 py-3 md:py-4 max-w-4xl">
+              <div className="space-y-2 md:space-y-3">
+                <div className="flex gap-2 md:gap-3">
                   <Textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -541,8 +573,8 @@ export default function DialoguePage() {
                       !selectedCharacter ||
                       !dialogueTarget
                     }
-                    className="flex-1 min-h-[80px] resize-none"
-                    rows={3}
+                    className="flex-1 min-h-[60px] md:min-h-[80px] resize-none text-sm md:text-base"
+                    rows={2}
                   />
                   <Button
                     onClick={handleSend}
@@ -554,7 +586,7 @@ export default function DialoguePage() {
                       !dialogueTarget
                     }
                     size="icon"
-                    className="shrink-0 w-10 h-10"
+                    className="shrink-0 w-10 h-10 md:w-12 md:h-12"
                   >
                     {isAITyping ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -572,13 +604,153 @@ export default function DialoguePage() {
                       </span>
                     )}
                   </span>
-                  <span>Enter 发送 · Shift+Enter 换行</span>
+                  <span className="hidden sm:inline">Enter 发送 · Shift+Enter 换行</span>
                 </div>
               </div>
             </div>
           </footer>
         </main>
       </div>
+
+      {/* 移动端角色选择 Sheet */}
+      <Sheet open={showSidebar} onOpenChange={setShowSidebar}>
+        <SheetContent side="left" className="w-80 p-0">
+          <SheetHeader className="p-4 pb-0">
+            <SheetTitle>角色设置</SheetTitle>
+            <SheetDescription>
+              选择你要扮演的角色和对话对象
+            </SheetDescription>
+          </SheetHeader>
+          <div className="p-4 space-y-4 overflow-y-auto h-[calc(100vh-80px)]">
+            {/* 我扮演的角色 */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  我扮演的角色
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Select
+                  value={selectedCharacter}
+                  onValueChange={handleCharacterChange}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择角色" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {availableCharacters.map((char) => (
+                      <SelectItem key={char.id} value={char.id}>
+                        <div className="flex items-center gap-2">
+                          <Avatar className="w-6 h-6">
+                            <AvatarImage src={char.avatar} />
+                            <AvatarFallback>{char.name[0]}</AvatarFallback>
+                          </Avatar>
+                          <span>{char.name}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {userCharacter && (
+                  <div className="mt-3 p-3 bg-background rounded-lg border">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage src={userCharacter.avatar} />
+                        <AvatarFallback>{userCharacter.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="font-medium text-sm">
+                        {userCharacter.name}
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {userCharacter.background}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* 对话对象 */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4" />
+                  对话对象
+                </CardTitle>
+                <p className="text-xs text-muted-foreground mt-1">
+                  仅显示该幕中出现的角色
+                </p>
+              </CardHeader>
+              <CardContent>
+                {dialogueTargets.length === 0 ? (
+                  <div className="text-sm text-muted-foreground p-3 bg-muted rounded-lg">
+                    该幕中没有其他角色可以对话
+                  </div>
+                ) : (
+                  <Select value={dialogueTarget} onValueChange={setDialogueTarget}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="选择对话对象" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {dialogueTargets.map((char) => (
+                        <SelectItem key={char.id} value={char.id}>
+                          <div className="flex items-center gap-2">
+                            <Avatar className="w-6 h-6">
+                              <AvatarImage src={char.avatar} />
+                              <AvatarFallback>{char.name[0]}</AvatarFallback>
+                            </Avatar>
+                            <span>{char.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+                {aiCharacter && (
+                  <div className="mt-3 p-3 bg-background rounded-lg border">
+                    <div className="flex items-center gap-2 mb-2">
+                      <Avatar className="w-8 h-8">
+                        <AvatarImage src={aiCharacter.avatar} />
+                        <AvatarFallback>{aiCharacter.name[0]}</AvatarFallback>
+                      </Avatar>
+                      <div className="font-medium text-sm">
+                        {aiCharacter.name}
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      {aiCharacter.background}
+                    </p>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* 场景信息 */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm">场景信息</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 text-xs">
+                <div>
+                  <div className="text-muted-foreground mb-1">场景</div>
+                  <div>{point.scene}</div>
+                </div>
+                <Separator />
+                <div>
+                  <div className="text-muted-foreground mb-1">冲突</div>
+                  <div>{point.conflict}</div>
+                </div>
+                <Separator />
+                <div>
+                  <div className="text-muted-foreground mb-1">挑战</div>
+                  <div className="text-orange-600">{point.challenge}</div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <DeadlockDialog
         open={showDeadlockDialog}
