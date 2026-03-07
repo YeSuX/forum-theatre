@@ -99,7 +99,7 @@ export default function HomePage() {
                   </div>
                   <div className="flex items-center gap-1.5">
                     <Users className="w-4 h-4" aria-hidden="true" />
-                    <span>1.2k 人参演</span>
+                    <span>1.2k 人观演</span>
                   </div>
                 </CardFooter>
               </Card>

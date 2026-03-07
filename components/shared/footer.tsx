@@ -1,18 +1,15 @@
 export function Footer() {
   return (
-    <footer className="bg-slate-900/50 border-t border-purple-300/20 py-8">
-      <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+    <footer className="border-t bg-background">
+      <div className="container mx-auto px-4 py-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
-            <span className="text-2xl">🎭</span>
-            <span className="text-white font-semibold">论坛剧场</span>
+            <span className="text-xl" role="img" aria-label="戏剧面具">
+              🎭
+            </span>
+            <span>论坛剧场</span>
           </div>
-          <div className="text-purple-300 text-sm text-center">
-            <p>在虚拟舞台上，探索真实的人性</p>
-          </div>
-          <div className="text-purple-300 text-sm">
-            <p>© 2026 Forum Theatre. All rights reserved.</p>
-          </div>
+          <p>© {new Date().getFullYear()} Forum Theatre. All rights reserved.</p>
         </div>
       </div>
     </footer>
