@@ -26,13 +26,13 @@ export class ReportGenerator {
   ): Promise<Report> {
     const avgBoundary =
       analysisResults.reduce((sum, a) => sum + a.boundary, 0) /
-        analysisResults.length || 0;
+      analysisResults.length || 0;
     const avgStrategy =
       analysisResults.reduce((sum, a) => sum + a.strategy, 0) /
-        analysisResults.length || 0;
+      analysisResults.length || 0;
     const avgEmpathy =
       analysisResults.reduce((sum, a) => sum + a.empathy, 0) /
-        analysisResults.length || 0;
+      analysisResults.length || 0;
 
     const heroType = this.determineHeroType(
       avgBoundary,
