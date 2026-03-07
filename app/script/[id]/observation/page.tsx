@@ -22,15 +22,14 @@ export default function ObservationPage() {
 
   useEffect(() => {
     if (isScriptEnded) {
-      console.log('Script ended, navigating to deconstruction page');
       router.push(`/script/${params.id}/deconstruction`);
     }
   }, [isScriptEnded, params.id, router]);
 
   if (!script) {
     return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <div className="text-white text-xl">加载中...</div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-xl text-muted-foreground">加载中...</div>
       </div>
     );
   }

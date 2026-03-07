@@ -112,4 +112,17 @@ export class ScriptEngine {
 
     return act.dialogues.find((d) => d.id === point.dialogueId) || null;
   }
+
+  getCurrentDialogueIndex(): number {
+    return (
+      this.script.acts
+        .slice(0, this.currentActIndex)
+        .reduce((sum, act) => sum + act.dialogues.length, 0) +
+      this.currentDialogueIndex
+    );
+  }
+
+  getTotalDialogues(): number {
+    return this.getAllDialogues().length;
+  }
 }
