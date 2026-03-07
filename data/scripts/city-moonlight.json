@@ -1,0 +1,290 @@
+{
+  "id": "city-moonlight",
+  "title": "城里的月光",
+  "description": "当农村老人走进城市，家庭的裂痕开始显现",
+  "tags": ["家庭关系", "代际冲突", "城市化"],
+  "duration": "20-30 分钟",
+  "coverImage": "https://source.unsplash.com/1920x1080/?city,night",
+  "theme": {
+    "primary": "#1a1f3a",
+    "secondary": "#ff6b35"
+  },
+  "acts": [
+    {
+      "id": "act-1",
+      "actNumber": 1,
+      "title": "欢喜背后的无奈",
+      "description": "邱华带着活鸡和红糖鸡蛋来到儿子家",
+      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "dialogues": [
+        {
+          "id": "dialogue-1-1",
+          "actId": "act-1",
+          "speaker": "qiu-hua",
+          "content": "哎呀，我的大孙子呢？快让奶奶看看！阿强，这城里楼太高了，抬头看帽子都要掉！小雅啊，妈来了，你受苦了！",
+          "emotion": "calm",
+          "stressLevel": 10,
+          "tensionLevel": "low"
+        },
+        {
+          "id": "dialogue-1-2",
+          "actId": "act-1",
+          "speaker": "xiao-ya",
+          "content": "妈，您辛苦了，快进来坐。妈，这鸡......城里不好养，而且小区有规定不能养活的......",
+          "emotion": "tense",
+          "stressLevel": 20,
+          "tensionLevel": "low"
+        },
+        {
+          "id": "dialogue-1-3",
+          "actId": "act-1",
+          "speaker": "qiu-hua",
+          "content": "不能养？这可是土鸡，正宗的老家笨鸡，最有营养了！我在阳台上搭个笼子就行。",
+          "emotion": "tense",
+          "stressLevel": 25,
+          "tensionLevel": "low"
+        },
+        {
+          "id": "dialogue-1-4",
+          "actId": "act-1",
+          "speaker": "a-qiang",
+          "content": "妈先放厨房，明天我处理。妈，您洗洗手，小雅不能吹风，您也注意点。",
+          "emotion": "calm",
+          "stressLevel": 30,
+          "tensionLevel": "medium"
+        },
+        {
+          "id": "dialogue-1-5",
+          "actId": "act-1",
+          "speaker": "qiu-hua",
+          "content": "对对对，坐月子可不能吹风，不能洗头刷牙，得捂着！小雅，你快回床上躺着，别下地！妈给你煮了红糖鸡蛋，最补血气。",
+          "emotion": "calm",
+          "stressLevel": 35,
+          "tensionLevel": "medium"
+        },
+        {
+          "id": "dialogue-1-6",
+          "actId": "act-1",
+          "speaker": "xiao-ya",
+          "content": "妈，医生说了，要适当通风，也要注意个人卫生，不然容易感染。",
+          "emotion": "tense",
+          "stressLevel": 45,
+          "tensionLevel": "medium"
+        },
+        {
+          "id": "dialogue-1-7",
+          "actId": "act-1",
+          "speaker": "qiu-hua",
+          "content": "医生说的那是城里人的理儿。咱们农村女人，生完孩子第二天就下地干活的都有，妈这是为你好。",
+          "emotion": "tense",
+          "stressLevel": 50,
+          "tensionLevel": "medium"
+        }
+      ]
+    },
+    {
+      "id": "act-2",
+      "actNumber": 2,
+      "title": "陌生的城市，熟悉的牵挂",
+      "description": "邱华独自在家，思念老伴",
+      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "dialogues": [
+        {
+          "id": "dialogue-2-1",
+          "actId": "act-2",
+          "speaker": "qiu-hua",
+          "content": "喂，老头子......吃了没？老寒腿又犯了吗？药得按时吃，别舍不得。我？我挺好的，孙子可胖乎了......",
+          "emotion": "calm",
+          "stressLevel": 30,
+          "tensionLevel": "low"
+        },
+        {
+          "id": "dialogue-2-2",
+          "actId": "act-2",
+          "speaker": "qiu-hua",
+          "content": "你别硬撑，不行就去卫生所看看。嗯......",
+          "emotion": "tense",
+          "stressLevel": 40,
+          "tensionLevel": "medium"
+        },
+        {
+          "id": "dialogue-2-3",
+          "actId": "act-2",
+          "speaker": "qiu-hua",
+          "content": "这水龙头的水咋不能直接喝呢？这楼底下的人，一个都不认识......",
+          "emotion": "tense",
+          "stressLevel": 45,
+          "tensionLevel": "medium"
+        }
+      ]
+    },
+    {
+      "id": "act-3",
+      "actNumber": 3,
+      "title": "观念的正面交锋",
+      "description": "育儿观念的冲突爆发",
+      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "dialogues": [
+        {
+          "id": "dialogue-3-1",
+          "actId": "act-3",
+          "speaker": "qiu-hua",
+          "content": "小雅，我看你这奶水清，不养人。得给孩子喂点米糊糊，顶饿，孩子长得快。我那会儿养阿强，就是吃米糊长大的，你看他多壮实！",
+          "emotion": "calm",
+          "stressLevel": 50,
+          "tensionLevel": "medium"
+        },
+        {
+          "id": "dialogue-3-2",
+          "actId": "act-3",
+          "speaker": "xiao-ya",
+          "content": "妈！世界卫生组织都说了，六个月前纯母乳喂养，不能喂水更不能喂米糊！宝宝的肠胃受不了，而且过敏风险很高！",
+          "emotion": "angry",
+          "stressLevel": 70,
+          "tensionLevel": "high"
+        },
+        {
+          "id": "dialogue-3-3",
+          "actId": "act-3",
+          "speaker": "qiu-hua",
+          "content": "什么组织不组织的，孩子哭就是饿！你们小时候都是这么过来的，哪个不是白白胖胖的？你们就是太讲究，书上说什么就信什么。",
+          "emotion": "angry",
+          "stressLevel": 80,
+          "tensionLevel": "high"
+        },
+        {
+          "id": "dialogue-3-4",
+          "actId": "act-3",
+          "speaker": "xiao-ya",
+          "content": "妈，这不是讲究，是科学！",
+          "emotion": "angry",
+          "stressLevel": 85,
+          "tensionLevel": "high"
+        },
+        {
+          "id": "dialogue-3-5",
+          "actId": "act-3",
+          "speaker": "qiu-hua",
+          "content": "科学科学，你们就是嫌我老土，嫌我脏！我今天出门买菜回来，你让我换衣服才能抱孩子，我手洗了三遍你还要用那什么消毒液！我在老家种地喂猪都没这么脏！",
+          "emotion": "angry",
+          "stressLevel": 90,
+          "tensionLevel": "high"
+        }
+      ]
+    },
+    {
+      "id": "act-4",
+      "actNumber": 4,
+      "title": "难以抉择的三重困境",
+      "description": "邱华接到女儿电话，老伴病倒",
+      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "dialogues": [
+        {
+          "id": "dialogue-4-1",
+          "actId": "act-4",
+          "speaker": "qiu-hua",
+          "content": "什么？！晕倒了？现在咋样了？医生咋说？",
+          "emotion": "angry",
+          "stressLevel": 95,
+          "tensionLevel": "high"
+        },
+        {
+          "id": "dialogue-4-2",
+          "actId": "act-4",
+          "speaker": "qiu-hua",
+          "content": "我......我......",
+          "emotion": "angry",
+          "stressLevel": 100,
+          "tensionLevel": "high"
+        }
+      ]
+    }
+  ],
+  "characters": [
+    {
+      "id": "qiu-hua",
+      "name": "邱华",
+      "age": 60,
+      "role": "农村妇女",
+      "avatar": "https://ui-avatars.com/api/?name=邱华&size=128&background=random",
+      "background": "农村妇女，朴实、勤快，有些固执，不善言辞，内心敏感。为了儿子，强忍着对老伴和故土的思念来城里。",
+      "coreMotivation": "为了儿子，想要帮忙带孙子",
+      "hiddenPressure": "对老伴和故土的思念，在城市的格格不入",
+      "powerLevel": "家庭中的低位，话语权被剥夺",
+      "behaviorBoundary": "强忍委屈，但当老伴出事时可能选择离开",
+      "languageStyle": "朴实、直接，带有方言特色，有时会用土话表达"
+    },
+    {
+      "id": "xiao-ya",
+      "name": "小雅",
+      "age": 30,
+      "role": "城市白领",
+      "avatar": "https://ui-avatars.com/api/?name=小雅&size=128&background=random",
+      "background": "城市白领，理性、讲究科学育儿和现代生活方式。产后情绪敏感，并非不善良，只是难以理解婆婆的老理儿。",
+      "coreMotivation": "按照科学方式养育孩子，保持现代生活方式",
+      "hiddenPressure": "产后情绪敏感，担心育儿方式被干预",
+      "powerLevel": "在育儿问题上有话语权，但需要婆婆的帮助",
+      "behaviorBoundary": "理性、讲究，但并非不善良，难以理解婆婆的老理儿",
+      "languageStyle": "理性、客气，但有时会显得疏离"
+    },
+    {
+      "id": "a-qiang",
+      "name": "阿强",
+      "age": 35,
+      "role": "夹心饼",
+      "avatar": "https://ui-avatars.com/api/?name=阿强&size=128&background=random",
+      "background": "典型的夹心饼，爱妻子也爱母亲，工作压力大，习惯用和稀泥的方式解决问题，但往往两边都不讨好。",
+      "coreMotivation": "希望家庭和谐，工作顺利",
+      "hiddenPressure": "工作压力大，夹在母亲和妻子之间",
+      "powerLevel": "表面上的决策者，实际上被动应对",
+      "behaviorBoundary": "习惯用和稀泥的方式，但可能导致两边都不讨好",
+      "languageStyle": "温和、回避冲突，经常打圆场"
+    }
+  ],
+  "interventionPoints": [
+    {
+      "id": "point-1",
+      "actId": "act-1",
+      "dialogueId": "dialogue-1-2",
+      "title": "小雅拒绝活鸡",
+      "scene": "小雅刚出院回家，邱华带来活鸡和红糖鸡蛋",
+      "conflict": "城乡文化差异",
+      "challenge": "沟通能力，如何让双方都感到被尊重",
+      "type": "communication",
+      "position": 15
+    },
+    {
+      "id": "point-2",
+      "actId": "act-2",
+      "dialogueId": "dialogue-2-3",
+      "title": "邱华的孤独",
+      "scene": "邱华孤独对着电视，想洗衣服又不敢洗",
+      "conflict": "精神困境",
+      "challenge": "同理心，如何帮助老人精神融入",
+      "type": "empathy",
+      "position": 40
+    },
+    {
+      "id": "point-3",
+      "actId": "act-3",
+      "dialogueId": "dialogue-3-5",
+      "title": "你们嫌我脏",
+      "scene": "邱华说出你们就是嫌我脏之后",
+      "conflict": "观念对抗",
+      "challenge": "边界感与同情心的平衡",
+      "type": "boundary",
+      "position": 70
+    },
+    {
+      "id": "point-4",
+      "actId": "act-4",
+      "dialogueId": "dialogue-4-2",
+      "title": "三重困境",
+      "scene": "邱华接到女儿电话，陷入三重困境",
+      "conflict": "结构性问题",
+      "challenge": "系统性思维，寻找非此即彼之外的解决方案",
+      "type": "systemic",
+      "position": 95
+    }
+  ]
+}
