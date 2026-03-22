@@ -39,6 +39,7 @@ import {
   Menu,
 } from "lucide-react";
 import { toast } from "sonner";
+import { moonshotAuthHeaders } from "@/lib/moonshot-auth-headers";
 
 export default function DialoguePage() {
   const params = useParams();
@@ -144,7 +145,10 @@ export default function DialoguePage() {
     try {
       const response = await fetch("/api/dialogue", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...moonshotAuthHeaders(),
+        },
         body: JSON.stringify({
           scriptId: script.id,
           interventionPointId: pointId,

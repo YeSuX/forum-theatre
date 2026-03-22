@@ -1,9 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ReportGenerator } from '@/lib/engines/report-generator';
 import { getScriptById } from '@/data/scripts';
+import { resolveMoonshotApiKey } from '@/lib/moonshot-resolve-api-key';
 
 export async function POST(request: NextRequest) {
   try {
+    const apiKey = resolveMoonshotApiKey(request);
+    if (!apiKey) {
+      return NextResponse.json(
+        {
+          error:
+            'API key not configured: set MOONSHOT_API_KEY on server or configure in app settings',
+        },
+        { status: 500 },
+      );
+    }
+
     const body = await request.json();
     const { scriptId, interventionPointId, messages, analysisResults, userThoughts } = body;
 
@@ -14,14 +26,6 @@ export async function POST(request: NextRequest) {
       analysisCount: analysisResults?.length,
       thoughtsCount: userThoughts?.length,
     });
-
-    if (!process.env.MOONSHOT_API_KEY) {
-      console.error('[Report API] MOONSHOT_API_KEY not configured');
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 },
-      );
-    }
 
     const script = getScriptById(scriptId);
     if (!script) {
@@ -41,10 +45,7 @@ export async function POST(request: NextRequest) {
     }
 
     console.log('[Report API] Initializing ReportGenerator...');
-    const generator = new ReportGenerator(
-      process.env.MOONSHOT_API_KEY,
-      'https://api.moonshot.cn/v1',
-    );
+    const generator = new ReportGenerator(apiKey, 'https://api.moonshot.cn/v1');
 
     console.log('[Report API] Generating report...');
     const report = await generator.generateReport(

@@ -1,9 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { JokerAnalysisEngine } from '@/lib/engines/joker-analysis-engine';
 import { getScriptById } from '@/data/scripts';
+import { resolveMoonshotApiKey } from '@/lib/moonshot-resolve-api-key';
 
 export async function POST(request: NextRequest) {
   try {
+    const apiKey = resolveMoonshotApiKey(request);
+    if (!apiKey) {
+      console.error('[Joker Analysis API] No Moonshot API key (env or header)');
+      return NextResponse.json(
+        {
+          error:
+            'API 密钥未配置：在部署环境设置 MOONSHOT_API_KEY，或使用页面右下角「API 配置」',
+        },
+        { status: 500 },
+      );
+    }
+
     const body = await request.json();
     const { scriptId, question, userAnswer, questionIndex, allAnswers } = body;
 
@@ -12,15 +25,6 @@ export async function POST(request: NextRequest) {
       questionIndex,
       answerLength: userAnswer?.length,
     });
-
-    // 检查 API 密钥
-    if (!process.env.MOONSHOT_API_KEY) {
-      console.error('[Joker Analysis API] MOONSHOT_API_KEY not configured');
-      return NextResponse.json(
-        { error: 'API 密钥未配置,请在 .env.local 中设置 MOONSHOT_API_KEY' },
-        { status: 500 }
-      );
-    }
 
     // 验证必需参数
     if (!scriptId || !question || !userAnswer) {
@@ -44,10 +48,7 @@ export async function POST(request: NextRequest) {
     console.log('[Joker Analysis API] Initializing analysis engine...');
     
     // 调用分析引擎
-    const engine = new JokerAnalysisEngine(
-      process.env.MOONSHOT_API_KEY,
-      'https://api.moonshot.cn/v1'
-    );
+    const engine = new JokerAnalysisEngine(apiKey, 'https://api.moonshot.cn/v1');
 
     console.log('[Joker Analysis API] Calling analysis engine...');
     const result = await engine.analyzeUserThought({

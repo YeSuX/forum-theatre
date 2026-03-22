@@ -12,6 +12,7 @@ import { JokerAvatar } from '@/components/joker/joker-avatar';
 import { QuestionInput } from '@/components/joker/question-input';
 import { AnalysisResult } from '@/components/joker/analysis-result';
 import { JokerAnalysisResponse } from '@/lib/engines/joker-analysis-engine';
+import { moonshotAuthHeaders } from '@/lib/moonshot-auth-headers';
 import { Lightbulb, ChevronLeft, ChevronRight, SkipForward, Sparkles, Loader2 } from 'lucide-react';
 
 const JOKER_QUESTIONS = [
@@ -72,6 +73,7 @@ export default function JokerQuestioningPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          ...moonshotAuthHeaders(),
         },
         body: JSON.stringify({
           scriptId: script.id,

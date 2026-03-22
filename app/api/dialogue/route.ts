@@ -2,9 +2,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { AIDialogueEngine } from '@/lib/engines/ai-dialogue-engine';
 import { DialogueAnalyzer } from '@/lib/engines/dialogue-analyzer';
 import { getScriptById } from '@/data/scripts';
+import { resolveMoonshotApiKey } from '@/lib/moonshot-resolve-api-key';
 
 export async function POST(request: NextRequest) {
   try {
+    const apiKey = resolveMoonshotApiKey(request);
+    if (!apiKey) {
+      return NextResponse.json(
+        {
+          error:
+            'API key not configured: set MOONSHOT_API_KEY on server or configure in app settings',
+        },
+        { status: 500 },
+      );
+    }
+
     const body = await request.json();
     const { 
       scriptId, 
@@ -14,13 +26,6 @@ export async function POST(request: NextRequest) {
       userCharacterId,
       aiCharacterId 
     } = body;
-
-    if (!process.env.MOONSHOT_API_KEY) {
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 },
-      );
-    }
 
     const script = getScriptById(scriptId);
     if (!script) {
@@ -81,24 +86,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (!process.env.MOONSHOT_API_KEY) {
-      console.error('MOONSHOT_API_KEY is not configured');
-      return NextResponse.json(
-        { error: 'API key not configured' },
-        { status: 500 },
-      );
-    }
-
     console.log('Initializing AI engines...');
-    const aiEngine = new AIDialogueEngine(
-      process.env.MOONSHOT_API_KEY,
-      'https://api.moonshot.cn/v1',
-    );
+    const aiEngine = new AIDialogueEngine(apiKey, 'https://api.moonshot.cn/v1');
 
-    const analyzer = new DialogueAnalyzer(
-      process.env.MOONSHOT_API_KEY,
-      'https://api.moonshot.cn/v1',
-    );
+    const analyzer = new DialogueAnalyzer(apiKey, 'https://api.moonshot.cn/v1');
 
     console.log('Generating AI response...');
 

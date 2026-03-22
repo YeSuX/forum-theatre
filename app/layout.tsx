@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/shared/header";
-import { Footer } from "@/components/shared/footer";
 import { ErrorBoundary } from "@/components/ui/error-boundary";
+import { MoonshotApiConfigDialog } from "@/components/moonshot/moonshot-api-config-dialog";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,6 +35,7 @@ export default function RootLayout({
             {/* <Header /> */}
             <main className="flex-1">{children}</main>
             {/* <Footer /> */}
+            <MoonshotApiConfigDialog />
           </div>
         </ErrorBoundary>
       </body>

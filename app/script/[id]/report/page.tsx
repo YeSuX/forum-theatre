@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useScriptStore } from "@/lib/stores/script-store";
 import { useDialogueStore } from "@/lib/stores/dialogue-store";
+import { moonshotAuthHeaders } from "@/lib/moonshot-auth-headers";
 import { Report } from "@/lib/types";
 import {
   Card,
@@ -92,7 +93,10 @@ export default function ReportPage() {
 
       const response = await fetch("/api/report", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          ...moonshotAuthHeaders(),
+        },
         body: JSON.stringify(requestBody),
       });
 
