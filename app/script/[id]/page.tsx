@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Play, Clock, Users, Sparkles, ChevronLeft } from "lucide-react";
+import { Play, Clock, Users, Sparkles, ChevronLeft, Film } from "lucide-react";
 import { CharacterCard } from "@/components/script/character-card";
 
 export default async function ScriptPage({
@@ -80,6 +80,42 @@ export default async function ScriptPage({
               </Button>
             </div>
           </div>
+
+          {script.promoVideo ? (
+            <div className="mt-10 lg:mt-12 max-w-4xl mx-auto space-y-3">
+              <div className="flex items-center gap-2">
+                <Film
+                  className="w-5 h-5 text-muted-foreground"
+                  aria-hidden="true"
+                />
+                <h2 className="text-lg font-semibold">剧本视频</h2>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                观演前可先了解故事氛围与呈现方式
+              </p>
+              <div className="relative aspect-video w-full overflow-hidden rounded-xl border bg-black shadow-sm">
+                <video
+                  className="h-full w-full object-contain"
+                  controls
+                  playsInline
+                  preload="metadata"
+                  poster={script.coverImage}
+                >
+                  {script.promoVideoWeb ? (
+                    <source
+                      src={encodeURI(script.promoVideoWeb)}
+                      type="video/mp4"
+                    />
+                  ) : null}
+                  <source
+                    src={encodeURI(script.promoVideo)}
+                    type="video/quicktime"
+                  />
+                  您的浏览器不支持视频播放。
+                </video>
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
 

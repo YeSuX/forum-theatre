@@ -198,11 +198,12 @@ export function ObservationView() {
             src={displayedAct.sceneBackground}
             alt=""
             fill
-            className="object-cover opacity-[0.28]"
+            className="object-cover"
             sizes="100vw"
             priority={false}
           />
-          <div className="absolute inset-0 bg-background/80" />
+          {/* 轻遮罩：保证对话区可读，同时让场景更清晰可见 */}
+          <div className="absolute inset-0 bg-background/35" />
         </div>
       ) : null}
 
