@@ -53,26 +53,16 @@ export function CharacterDetail({ character }: CharacterDetailProps) {
       {/* Left: Character Photo */}
       <div className="space-y-4">
         <Card className="overflow-hidden">
-          <div className="relative aspect-3/4 bg-muted">
-            {/* 占位图:可以替换为实际角色照片 */}
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="text-center space-y-2">
-                <div className="w-24 h-24 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-                  <span className="text-4xl font-bold text-primary">
-                    {character.name[0]}
-                  </span>
-                </div>
-                <p className="text-sm text-muted-foreground">角色照片占位</p>
-              </div>
-            </div>
-            {/* 如果有实际照片,使用下面的代码 */}
-            {/* <Image
+          {/* 使用 padding 撑开高度，避免 flex 子项内仅 absolute 图片时高度塌陷 */}
+          <div className="relative h-0 w-full overflow-hidden bg-zinc-950 pb-[133.33%]">
+            <Image
               src={character.avatar}
-              alt={`${character.name}的照片`}
+              alt={`${character.name}立绘`}
               fill
-              className="object-cover"
+              className="object-contain object-bottom"
               sizes="(max-width: 1024px) 100vw, 400px"
-            /> */}
+              priority
+            />
           </div>
         </Card>
 

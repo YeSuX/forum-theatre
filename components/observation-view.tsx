@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useScriptStore } from '@/lib/stores/script-store';
 import { Progress } from '@/components/ui/progress';
@@ -187,7 +188,24 @@ export function ObservationView() {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="relative min-h-screen bg-background flex flex-col">
+      {hasStarted && displayedAct?.sceneBackground ? (
+        <div
+          aria-hidden
+          className="fixed inset-0 z-0 pointer-events-none"
+        >
+          <Image
+            src={displayedAct.sceneBackground}
+            alt=""
+            fill
+            className="object-cover opacity-[0.28]"
+            sizes="100vw"
+            priority={false}
+          />
+          <div className="absolute inset-0 bg-background/80" />
+        </div>
+      ) : null}
+
       {/* Header */}
       <header className="sticky top-0 z-50 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container mx-auto px-4 py-4">
@@ -224,7 +242,7 @@ export function ObservationView() {
       {/* Dialogue Area */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto"
+        className="relative z-10 flex-1 overflow-y-auto"
       >
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           {!hasStarted ? (
@@ -304,7 +322,7 @@ export function ObservationView() {
 
       {/* Footer Controls */}
       {hasStarted && (
-        <footer className="sticky bottom-0 border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
+        <footer className="sticky bottom-0 z-50 border-t bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
           <div className="container mx-auto px-4 py-4">
             <div className="flex items-center justify-center max-w-4xl mx-auto">
               {isAllActsComplete ? (

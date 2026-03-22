@@ -70,10 +70,6 @@ export default async function ScriptPage({
                   <Clock className="w-4 h-4" aria-hidden="true" />
                   <span>{script.duration}</span>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <Users className="w-4 h-4" aria-hidden="true" />
-                  <span>1.2k 人参演</span>
-                </div>
               </div>
 
               <Button size="lg" className="w-full sm:w-auto" asChild>

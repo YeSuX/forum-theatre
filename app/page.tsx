@@ -62,14 +62,14 @@ export default function HomePage() {
               className="group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg"
             >
               <Card className="h-full transition-colors hover:border-primary overflow-hidden">
-                <div className="relative aspect-video overflow-hidden bg-muted">
+                <div className="relative h-0 w-full shrink-0 overflow-hidden bg-muted pb-[56.25%]">
                   <Image
-                    src="/placeholder.svg"
+                    src={script.coverImage}
                     alt={`${script.title}封面图`}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform group-hover:scale-105"
-                    priority={false}
+                    priority={scripts[0]?.id === script.id}
                   />
                 </div>
 
@@ -96,10 +96,6 @@ export default function HomePage() {
                   <div className="flex items-center gap-1.5">
                     <Clock className="w-4 h-4" aria-hidden="true" />
                     <span>{script.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <Users className="w-4 h-4" aria-hidden="true" />
-                    <span>1.2k 人观演</span>
                   </div>
                 </CardFooter>
               </Card>

@@ -4,7 +4,7 @@
   "description": "当农村老人走进城市，家庭的裂痕开始显现",
   "tags": ["家庭关系", "代际冲突", "城市化"],
   "duration": "20-30 分钟",
-  "coverImage": "https://source.unsplash.com/1920x1080/?city,night",
+  "coverImage": "/backgroud_1.png",
   "theme": {
     "primary": "#1a1f3a",
     "secondary": "#ff6b35"
@@ -15,7 +15,7 @@
       "actNumber": 1,
       "title": "欢喜背后的无奈",
       "description": "邱华带着活鸡和红糖鸡蛋来到儿子家",
-      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "sceneBackground": "/backgroud_1.png",
       "dialogues": [
         {
           "id": "dialogue-1-1",
@@ -87,7 +87,7 @@
       "actNumber": 2,
       "title": "陌生的城市，熟悉的牵挂",
       "description": "邱华独自在家，思念老伴",
-      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "sceneBackground": "/backgroud_2.png",
       "dialogues": [
         {
           "id": "dialogue-2-1",
@@ -123,7 +123,7 @@
       "actNumber": 3,
       "title": "观念的正面交锋",
       "description": "育儿观念的冲突爆发",
-      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "sceneBackground": "/backgroud_3.png",
       "dialogues": [
         {
           "id": "dialogue-3-1",
@@ -177,7 +177,7 @@
       "actNumber": 4,
       "title": "难以抉择的三重困境",
       "description": "邱华接到女儿电话，老伴病倒",
-      "sceneBackground": "https://picsum.photos/1920/1080?blur=2",
+      "sceneBackground": "/backgroud_4.png",
       "dialogues": [
         {
           "id": "dialogue-4-1",
@@ -206,7 +206,7 @@
       "name": "邱华",
       "age": 60,
       "role": "农村妇女",
-      "avatar": "https://ui-avatars.com/api/?name=邱华&size=128&background=random",
+      "avatar": "/people_1.png",
       "background": "农村妇女，朴实、勤快，有些固执，不善言辞，内心敏感。为了儿子，强忍着对老伴和故土的思念来城里。",
       "coreMotivation": "为了儿子，想要帮忙带孙子",
       "hiddenPressure": "对老伴和故土的思念，在城市的格格不入",
@@ -219,7 +219,7 @@
       "name": "小雅",
       "age": 30,
       "role": "城市白领",
-      "avatar": "https://ui-avatars.com/api/?name=小雅&size=128&background=random",
+      "avatar": "/people_3.png",
       "background": "城市白领，理性、讲究科学育儿和现代生活方式。产后情绪敏感，并非不善良，只是难以理解婆婆的老理儿。",
       "coreMotivation": "按照科学方式养育孩子，保持现代生活方式",
       "hiddenPressure": "产后情绪敏感，担心育儿方式被干预",
@@ -232,7 +232,7 @@
       "name": "阿强",
       "age": 35,
       "role": "夹心饼",
-      "avatar": "https://ui-avatars.com/api/?name=阿强&size=128&background=random",
+      "avatar": "/people_2.png",
       "background": "典型的夹心饼，爱妻子也爱母亲，工作压力大，习惯用和稀泥的方式解决问题，但往往两边都不讨好。",
       "coreMotivation": "希望家庭和谐，工作顺利",
       "hiddenPressure": "工作压力大，夹在母亲和妻子之间",
