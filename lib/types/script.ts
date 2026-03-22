@@ -5,7 +5,9 @@ export interface Script {
   tags: string[];
   duration: string;
   coverImage: string;
-  /** H.264 + AAC 的 MP4，Chrome / Edge / Firefox 可播，建议优先提供 */
+  /** 可选：QuickTime 等后备源（如 .mov），浏览器兼容性较差 */
+  promoVideo?: string;
+  /** 可选：H.264 + AAC 的 MP4，主流浏览器推荐 */
   promoVideoWeb?: string;
   theme: {
     primary: string;

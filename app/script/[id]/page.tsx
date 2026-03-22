@@ -81,7 +81,7 @@ export default async function ScriptPage({
             </div>
           </div>
 
-          {script.promoVideo ? (
+          {script.promoVideo || script.promoVideoWeb ? (
             <div className="mt-10 lg:mt-12 max-w-4xl mx-auto space-y-3">
               <div className="flex items-center gap-2">
                 <Film
@@ -107,10 +107,12 @@ export default async function ScriptPage({
                       type="video/mp4"
                     />
                   ) : null}
-                  <source
-                    src={encodeURI(script.promoVideo)}
-                    type="video/quicktime"
-                  />
+                  {script.promoVideo ? (
+                    <source
+                      src={encodeURI(script.promoVideo)}
+                      type="video/quicktime"
+                    />
+                  ) : null}
                   您的浏览器不支持视频播放。
                 </video>
               </div>
